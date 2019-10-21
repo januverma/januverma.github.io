@@ -81,6 +81,11 @@
 	/*color: #999966;*/
 }
 
+.sub_project_name{
+	font: 20px palatino;
+	color: teal;
+}
+
 .projects{
 	font-size: 18px;
 	font-family: palatino;
