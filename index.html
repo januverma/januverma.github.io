@@ -1,332 +1,1438 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<link href="./static/css/google_fonts.css" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" type="text/css" href="./static/css/main.css">
-	<link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
-	<title>Random Inferences</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Janu Verma</title>
+    <meta name="description" content="Writing about the ideas shaping AI. Principal Applied Scientist at Microsoft.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #fff;
+            --cream: #f8f6f1;
+            --orange: #e54d2e;
+            --gray: #555;
+            --light-gray: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--cream);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--orange);
+            color: var(--white);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--cream);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 4rem;
+            background: rgba(248, 246, 241, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        nav.dark-section {
+            background: var(--black);
+        }
+
+        nav.dark-section.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-name {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--black);
+            transition: color 0.3s ease;
+        }
+
+        nav.dark-section .nav-name {
+            color: var(--white);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--black);
+            transition: all 0.3s ease;
+        }
+
+        nav.dark-section .nav-links a {
+            color: var(--white);
+        }
+
+        .nav-links a:hover {
+            color: var(--orange);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 4rem;
+            position: relative;
+        }
+
+        .hero-massive {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4.5rem, 16vw, 14rem);
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: 4rem;
+        }
+
+        .hero-massive .line {
+            display: block;
+            overflow: hidden;
+            padding-bottom: 0.15em;
+            margin-bottom: -0.15em;
+        }
+
+        .hero-massive .line span {
+            display: block;
+            animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: translateY(100%);
+        }
+
+        .hero-massive .line:nth-child(2) span {
+            animation-delay: 0.1s;
+        }
+
+        .hero-massive .italic {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        @keyframes slideUp {
+            to { transform: translateY(0); }
+        }
+
+        .hero-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 3rem;
+            max-width: 1400px;
+        }
+
+        .hero-intro {
+            max-width: 480px;
+            font-size: 1rem;
+            line-height: 1.9;
+            color: var(--gray);
+        }
+
+        .hero-intro strong {
+            color: var(--black);
+        }
+
+        .hero-cta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn-circle {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-circle::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--orange);
+            transform: scale(0);
+            border-radius: 50%;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-circle:hover::before {
+            transform: scale(1);
+        }
+
+        .btn-circle span {
+            position: relative;
+            z-index: 1;
+            line-height: 1.4;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gray);
+        }
+
+        .scroll-line {
+            width: 50px;
+            height: 1px;
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--orange);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollLine {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        /* Ideas Section */
+        .ideas {
+            background: var(--black);
+            color: var(--white);
+            padding: 10rem 4rem;
+            position: relative;
+        }
+
+        .ideas-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+            align-items: end;
+        }
+
+        .ideas-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 400;
+            line-height: 1.05;
+        }
+
+        .ideas-title .italic {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        .ideas-subtitle {
+            max-width: 400px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .idea-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
+        }
+
+        .idea-card:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: var(--orange);
+            transform: translateY(-4px);
+        }
+
+        .idea-card.featured {
+            grid-column: span 2;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 4rem;
+        }
+
+        .idea-card.featured .idea-content {
+            max-width: 600px;
+        }
+
+        .idea-number {
+            font-size: 0.6rem;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .idea-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            line-height: 1.35;
+            margin-bottom: 1rem;
+        }
+
+        .idea-card.featured .idea-title {
+            font-size: 2.25rem;
+        }
+
+        .idea-desc {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.7;
+            margin-top: auto;
+        }
+
+        .idea-arrow {
+            width: 48px;
+            height: 48px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            align-self: flex-end;
+        }
+
+        .idea-card:hover .idea-arrow {
+            background: var(--orange);
+            border-color: var(--orange);
+        }
+
+        .posts-list {
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .post-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            padding: 2.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            align-items: center;
+        }
+
+        .post-item:hover {
+            padding-left: 1.5rem;
+        }
+
+        .post-item:hover .post-title {
+            color: var(--orange);
+        }
+
+        .post-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+
+        .post-meta {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.35);
+            white-space: nowrap;
+        }
+
+
+        .substack-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--orange);
+            transition: gap 0.3s ease;
+        }
+
+        .substack-cta:hover {
+            gap: 1.5rem;
+        }
+
+        .substack-cta .line {
+            width: 40px;
+            height: 1px;
+            background: var(--orange);
+        }
+
+        /* Story Section */
+        .story {
+            padding: 12rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8rem;
+            align-items: start;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .story-left {
+            position: sticky;
+            top: 6rem;
+        }
+
+        .story-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--orange);
+            margin-bottom: 2rem;
+        }
+
+        .story-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 3rem;
+        }
+
+        .story-headline .italic {
+            font-style: italic;
+        }
+
+        .story-photo {
+            position: relative;
+            max-width: 380px;
+        }
+
+        .story-photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(20%);
+            transition: filter 0.4s ease;
+            position: relative;
+            left: -16px;
+            top: -16px;
+        }
+
+        .story-photo:hover img {
+            filter: grayscale(0%);
+        }
+        
+
+        .story-photo::before {
+            content: '';
+            position: absolute;
+            top: -16px;
+            left: -16px;
+            right: 16px;
+            bottom: 16px;
+            border: 1px solid var(--orange);
+            z-index: -1;
+        }
+
+        .story-right {
+            padding-top: 1rem;
+        }
+
+        .story-text {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .story-text strong {
+            color: var(--black);
+            font-weight: 700;
+        }
+
+        .story-places {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 4rem;
+        }
+
+        .place-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--white);
+            border: 1px solid var(--light-gray);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .place-tag:hover {
+            border-color: var(--black);
+            transform: translateX(8px);
+        }
+
+        .place-tag .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--orange);
+            border-radius: 50%;
+        }
+
+        /* Speaking Section */
+        .speaking {
+            background: var(--white);
+            padding: 10rem 4rem;
+        }
+
+        .speaking-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .speaking-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
+            align-items: end;
+        }
+
+        .speaking-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .speaking-title .italic {
+            font-style: italic;
+        }
+
+        .speaking-intro {
+            max-width: 450px;
+        }
+
+        .speaking-intro p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .speaking-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.75rem;
+            background: var(--black);
+            color: var(--white);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            transition: all 0.3s ease;
+        }
+
+        .speaking-cta-btn:hover {
+            background: var(--orange);
+        }
+
+        .topics-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .topic-card {
+            padding: 2rem;
+            border: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            border-color: var(--orange);
+            transform: translateY(-4px);
+        }
+
+        .topic-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+        }
+
+        .topic-card p {
+            font-size: 0.8rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        .talks-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .talks-column h4 {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--orange);
+            margin-bottom: 2rem;
+        }
+
+        .talk-item {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .talk-item:last-child {
+            border-bottom: none;
+        }
+
+        .talk-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 400;
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .talk-venue {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .media-item {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+        }
+
+        .media-item:last-child {
+            border-bottom: none;
+        }
+
+        .media-item:hover {
+            padding-left: 1rem;
+        }
+
+        .media-item:hover .media-title {
+            color: var(--orange);
+        }
+
+        .media-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 400;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+
+        /* Research Section */
+        .research {
+            background: var(--white);
+            padding: 10rem 4rem;
+        }
+
+        .research-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .research-header {
+            margin-bottom: 4rem;
+        }
+
+        .research-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .research-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+        }
+
+        .research-list {
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .research-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 3rem;
+            padding: 2.5rem 0;
+            border-bottom: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+        }
+
+        .research-item:hover {
+            padding-left: 1rem;
+        }
+
+        .research-venue {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--orange);
+            padding-top: 0.4rem;
+        }
+
+        .research-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            line-height: 1.45;
+        }
+
+        .research-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .scholar-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--orange);
+            transition: gap 0.3s ease;
+        }
+
+        .scholar-link:hover {
+            gap: 1rem;
+        }
+
+        /* Contact */
+        .contact {
+            background: var(--black);
+            color: var(--white);
+            padding: 12rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 25vw;
+            font-style: italic;
+            color: rgba(255,255,255,0.02);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .contact-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--orange);
+            margin-bottom: 2rem;
+        }
+
+        .contact-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .contact-title .italic {
+            font-style: italic;
+        }
+
+        .contact-text {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        .contact-email {
+            display: inline-block;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+            border-bottom: 2px solid var(--orange);
+            padding-bottom: 0.5rem;
+            margin-bottom: 4rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-email:hover {
+            color: var(--orange);
+        }
+
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            width: 52px;
+            height: 52px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: var(--orange);
+            border-color: var(--orange);
+        }
+
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: rgba(255,255,255,0.25);
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .ideas-header {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .ideas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .idea-card.featured {
+                grid-column: span 1;
+                flex-direction: column;
+            }
+
+            .story {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .story-left {
+                position: relative;
+                top: 0;
+            }
+
+            .story-photo {
+                max-width: 300px;
+            }
+
+            .research-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.25rem 1.5rem;
+            }
+
+            nav.scrolled {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero, .ideas, .story, .research, .contact {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .hero {
+                padding-top: 5rem;
+                padding-bottom: 5rem;
+            }
+
+            .hero-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-circle {
+                width: 110px;
+                height: 110px;
+            }
+
+            .scroll-indicator {
+                left: 1.5rem;
+            }
+
+            .idea-card {
+                padding: 2rem;
+                min-height: auto;
+            }
+
+            .story-photo {
+                max-width: 260px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-	<div class="head">
-		<img src="static/images/hero.jpg">
-		
+    <nav id="navbar">
+        <span class="nav-name">Janu Verma</span>
+        <div class="nav-links">
+            <a href="#story">About</a>
+             <a href="#ideas">Writing</a>
+             <a href="#speaking">Speaking</a>
+            <!-- <a href="#research">Research</a> -->
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1 class="hero-massive">
+            <span class="line"><span>Janu</span></span>
+            <span class="line"><span><em class="italic">Verma</em></span></span>
+        </h1>
+        
+        <div class="hero-bottom">
+            <p class="hero-intro">
+                I study how machines learn, remember, and reason. I strive to understand things deeply — and share what I find. Over last few years, my focus has evolved towards building learning systems that reason, adapt, and improve though feedback. Currently leading AI personalization research at <strong>Microsoft</strong>.
+            </p>
+            <div class="hero-cta">
+                <a href="https://januverma.substack.com" target="_blank" class="btn-circle">
+                    <span>Read<br>Ideas</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <span>Scroll</span>
+        </div>
+    </section>
+
+    <section class="ideas" id="ideas">
+        <div class="ideas-header">
+            <h2 class="ideas-title">
+                Thinking<br>in <span class="italic">public</span>
+            </h2>
+            <p class="ideas-subtitle">
+                Deep technical writing on the systems powering modern AI.
+                I write about whatever I am trying to understand — agents, RL, recommendations, LLMs, sometimes life. The thread is rigor, not topic.
+                Writing is how I understand the world. It's how I clarify my thinking, test my assumptions, and connect with others. It's also how I document the journey — the successes, failures, and lessons learned along the way.
+
+            </p>
+        </div>
+
+        <!-- <div class="ideas-grid">
+            <a href="https://januverma.substack.com" target="_blank" class="idea-card featured reveal">
+                <div class="idea-content">
+                    <span class="idea-number">Series</span>
+                    <h3 class="idea-title">Fine-tuning LLMs with Reinforcement Learning</h3>
+                    <p class="idea-desc">A multi-part exploration of RLHF, PPO, DPO, and the techniques actually moving the needle on model capabilities.</p>
+                </div>
+                <div class="idea-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="idea-card reveal">
+                <span class="idea-number">Research</span>
+                <h3 class="idea-title">Multi-turn Tool Use with RL</h3>
+                <p class="idea-desc">Training agents to use tools effectively across extended conversations.</p>
+                <div class="idea-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="idea-card reveal">
+                <span class="idea-number">Series</span>
+                <h3 class="idea-title">LLMs for Recommender Systems</h3>
+                <p class="idea-desc">How language models are reshaping personalization and recommendations.</p>
+                <div class="idea-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="idea-card featured reveal">
+                <div class="idea-content">
+                    <span class="idea-number">Deep Dive</span>
+                    <h3 class="idea-title">Semantic IDs for Recommendation Systems</h3>
+                    <p class="idea-desc">Moving beyond ID embeddings to semantically meaningful item representations.</p>
+                </div>
+                <div class="idea-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                </div>
+            </a>
+        </div>
+
+        <a href="https://januverma.substack.com" target="_blank" class="substack-cta">
+            <span class="line"></span>
+            Subscribe on Substack
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a> -->
+        <div class="posts-list">
+            <a href="https://januverma.substack.com" target="_blank" class="post-item reveal">
+                <h3 class="post-title">From Custom Parsing to MCP: Rebuilding the Data Analysis Agent</h3>
+                <span class="post-meta">Deep Dive</span>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="post-item reveal">
+                <h3 class="post-title">RecSys After LLMs: Four Paradigms for What Comes Next</h3>
+                <span class="post-meta">Research</span>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="post-item reveal">
+                <h3 class="post-title">Building a Data Analysis Agent</h3>
+                <span class="post-meta">Deep Dive</span>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="post-item reveal">
+                <h3 class="post-title">Multi-Turn Tool Use with RL</h3>
+                <span class="post-meta">Research</span>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="post-item reveal">
+                <h3 class="post-title">Fine-tuning LLMs using Reinforcement Learning</h3>
+                <span class="post-meta">Series</span>
+            </a>
+            <a href="https://januverma.substack.com" target="_blank" class="post-item reveal">
+                <h3 class="post-title">LLMs for Recommender Systems</h3>
+                <span class="post-meta">Series</span>
+            </a>
+        </div>
+
+        <a href="https://januverma.substack.com" target="_blank" class="substack-cta">
+            <span class="line"></span>
+            All posts on Substack
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </section>
+
+    <section class="story" id="story">
+        <div class="story-left">
+            <span class="story-label">About</span>
+            <h2 class="story-headline">
+                The journey is <span class="italic">everything</span>
+            </h2>
+            <div class="story-photo reveal">
+                <img src="photo.jpg" alt="Janu Verma">
+            </div>
+        </div>
+
+        <div class="story-right">
+            <p class="story-text reveal">
+                I started where the abstractions are purest — <strong>Cambridge</strong>, studying the mathematics of string theory and geometry. Then I spent three years in a math PhD before dropping out to build things that matter now.
+            </p>
+            <p class="story-text reveal">
+                That search took me through <strong>computational biology at Cornell</strong> (modeling crop genetics), <strong>IBM Research</strong> (drug discovery, clinical NLP), and eventually into the systems that touch everyday life — fraud detection at <strong>Mastercard</strong> covering a billion transactions, and personalized recommendations on the web scale.
+                Along the way, I've published research in venues like <em>Nature Genetics</em>, <em>KDD</em>, and <em>IEEE VIS</em>.
+            </p>
+            <p class="story-text reveal">
+                Today at <strong>Microsoft</strong>, I lead applied research for M365 Copilot personalization. The problems I care about: how do AI systems learn user preferences? How do they reason across multi-turn conversations? How do we make tools and memory actually work?
+            </p>
+            <p class="story-text reveal">
+                The math background never left. It shaped how I think about representation, structure, and abstraction in ML. It shows up in how I feel the need to actually understand something before I trust it.
+            </p>
+            <p class="story-text reveal">
+                I have always been drawn to hard problems in complex systems. Be it algebraic geometry, crop genetics, fraud networks, or how AI learns what a person actually wants. The domain changes, but the way of thinking does not.
+                <!-- Writing is how I understand the world. It's how I clarify my thinking, test my assumptions, and connect with others. It's also how I document the journey — the successes, failures, and lessons learned along the way. -->
+            </p>
+            <p class="story-text reveal">
+                I use writing as a tool for growth. By articulating my ideas, I hold myself accountable to continuous learning and improvement. It's a way to push the boundaries of my knowledge and share that growth with others. Writing helps me make sense of the complex world of AI and my place within it.
+            </p>
+            <!-- <p class="story-text reveal">
+                Writing is not just a means of communication for me; it's a way of life. It's how I make sense of the complex world of AI and my place within it.
+            </p> -->
+            <p class="story-text reveal">
+                <!-- I write because it forces clarity. If I can't explain something, I don't understand it yet. -->
+                When I'm not reading papers, I'm probably making pour-over videos, exploring a recipe, or thinking too much about what to wear.
+            </p>
+
+            <!-- <div class="story-places reveal">
+                <div class="place-tag">
+                    <span class="dot"></span>
+                    Microsoft — Principal Applied Scientist
+                </div>
+                <div class="place-tag">
+                    <span class="dot"></span>
+                    Mastercard AI Garage — ML Manager
+                </div>
+                <div class="place-tag">
+                    <span class="dot"></span>
+                    IBM Research — Research Engineer
+                </div>
+                <div class="place-tag">
+                    <span class="dot"></span>
+                    Cornell University — Research Associate
+                </div>
+                <div class="place-tag">
+                    <span class="dot"></span>
+                    Cambridge — Part III (String Theory)
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <section class="speaking" id="speaking">
+        <div class="speaking-inner">
+            <div class="speaking-header">
+                <h2 class="speaking-title">
+                    Speaking & <span class="italic">Media</span>
+                </h2>
+                <div class="speaking-intro">
+                    <p>
+                        I speak about AI that works in practice — the gap between research and production, building systems at scale, and what's actually changing in ML.
+                    </p>
+                    <a href="mailto:j.verma5@gmail.com?subject=Speaking Inquiry" class="speaking-cta-btn">
+                        Invite me to speak
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <span class="topics-label">Topics I speak about</span>
+            <div class="topics-grid">
+                <div class="topic-card reveal">
+                    <h3>LLMs & Agents</h3>
+                    <p>From fine-tuning with RL to building agents that actually work — tool use, memory, and multi-turn reasoning.</p>
+                </div>
+                <div class="topic-card reveal">
+                    <h3>Recommendations & Personalization</h3>
+                    <p>How LLMs are reshaping RecSys, semantic approaches, and building AI that understands user intent.</p>
+                </div>
+                <div class="topic-card reveal">
+                    <h3>Research to Production</h3>
+                    <p>Bridging the gap — shipping ML at billion-scale, what breaks, what works, and how to build teams that deliver.</p>
+                </div>
+            </div>
+
+            <div class="talks-section">
+                <div class="talks-column">
+                    <h4>Selected Talks</h4>
+                    <div class="talk-item reveal">
+                        <p class="talk-title">Graph Embedding Methods for Recommendation Systems</p>
+                        <p class="talk-venue">Data Hacks Summit, Analytics Vidhya</p>
+                    </div>
+                    <div class="talk-item reveal">
+                        <p class="talk-title">Transfer Learning in NLP</p>
+                        <p class="talk-venue">PyData Delhi</p>
+                    </div>
+                    <div class="talk-item reveal">
+                        <p class="talk-title">Beyond QWERTY: Solving the Input Problem of India</p>
+                        <p class="talk-venue">Future of Work, YourStory</p>
+                    </div>
+                    <div class="talk-item reveal">
+                        <p class="talk-title">Social Bias in Machine Learning</p>
+                        <p class="talk-venue">PyData Delhi</p>
+                    </div>
+                    <div class="talk-item reveal">
+                        <p class="talk-title">Understanding Clustering: Supervising the Unsupervised</p>
+                        <p class="talk-venue">PyData Delhi</p>
+                    </div>
+                    <div class="talk-item reveal">
+                        <p class="talk-title">Data Driven Healthcare</p>
+                        <p class="talk-venue">IIIT Delhi</p>
+                    </div>
+                </div>
+
+                <!-- <div class="talks-column">
+                    <h4>Media</h4>
+                    <a href="#" class="media-item reveal">
+                        <p class="media-title">Can Hike replace the keyboard with stickers? Solving India's input problem.</p>
+                    </a>
+                    <a href="#" class="media-item reveal">
+                        <p class="media-title">Leadership Lecture Series — Janu Verma</p>
+                    </a>
+                    <a href="#" class="media-item reveal">
+                        <p class="media-title">Cassava is genetically decaying, putting staple crop at risk</p>
+                    </a>
+                    <a href="#" class="media-item reveal">
+                        <p class="media-title">The Nuts and Bolts of Image Recognition</p>
+                    </a>
+                </div> -->
+            </div>
+        </div>
+    </section>
 
 
+    <!-- <section class="research" id="research">
+        <div class="research-inner">
+            <div class="research-header">
+                <span class="research-label">Selected Work</span>
+                <h2 class="research-title">Research & Publications</h2>
+            </div>
 
-	</div>
-	<div class="social">
-			<h2 class="name">Janu Verma</h2>
-		<a href="mailto:j.verma5@gmail.com" target="_blank">email</a> | <a href="https://twitter.com/januverma" target="_blank">twitter</a> | <a href="https://github.com/januverma" target="_blank">github</a> | <a href="https://www.linkedin.com/in/janu-verma-b79b8823" target="_blank">linkedin</a> | <a href="https://scholar.google.com/citations?user=b2LJDtMAAAAJ&hl=en&authuser=1" target="_blank">google scholar</a>
-	</div>
+            <div class="research-list">
+                <div class="research-item reveal">
+                    <span class="research-venue">MLADS '25</span>
+                    <div class="research-info">
+                        <h3>Generative Recommenders for Zero-Query Prompt Recommendation</h3>
+                        <p>Janu Verma, Vlad Kolesnyk, Royi Ronen</p>
+                    </div>
+                </div>
+                <div class="research-item reveal">
+                    <span class="research-venue">KDD '22</span>
+                    <div class="research-info">
+                        <h3>Label-aware Sampling using Contrastive Learning for GNN-based Fraud Detection</h3>
+                        <p>Janu Verma, Garima Arora, et al.</p>
+                    </div>
+                </div>
+                <div class="research-item reveal">
+                    <span class="research-venue">ECIR '19</span>
+                    <div class="research-info">
+                        <h3>Heterogeneous Edge Embedding for Friend Recommendation</h3>
+                        <p>Janu Verma, Srishti Gupta, et al.</p>
+                    </div>
+                </div>
+                <div class="research-item reveal">
+                    <span class="research-venue">IEEE VIS '18</span>
+                    <div class="research-info">
+                        <h3>Clustervision: Visual Supervision of Unsupervised Clustering</h3>
+                        <p>Bum Chul Kwon, Janu Verma, et al.</p>
+                    </div>
+                </div>
+                <div class="research-item reveal">
+                    <span class="research-venue">Nat. Gen. '17</span>
+                    <div class="research-info">
+                        <h3>Cassava Haplotype Map Highlights Fixation of Deleterious Mutations</h3>
+                        <p>Ramu et al., incl. Janu Verma</p>
+                    </div>
+                </div>
+            </div>
 
+            <a href="https://scholar.google.com" target="_blank" class="scholar-link">
+                Full list on Google Scholar
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section> -->
 
-<!--  class="king-basil" -->
-	<div class="about">
-		<p class="main_content">
-			<p>
-				I am a machine learning reseacher based in London. 
-				My research interests are in graph neural networks, recommendation systems, and NLP. 
-				Presently, I am a Principal Applied Scientist at Microsoft, where I am part of the Microsoft Search, Assistance, and Intelligence (MSAI) team. My current focus is on neural recommendation systems using graph neural networks and transformer models. Prior to this, I was leading a team of machine learning scientists and engineers at Mastercard AI Garage where my team conducted applied research in financial domain and build fraud and risk management products.
-				Previously, I was a researcher in the <a href="http://researcher.ibm.com/researcher/view_group.php?id=6743" target="_blank">HealthCare Analytics Research Group</a> at IBM TJ Watson Research Center in New York where I pursued research in machine learning and information visualization for healthcare. 
-				More recently, I worked at two startups <a href="https://www.cure.fit/">Cure.Fit</a> and <a href="https://hike.in/">Hike Messenger</a>, where my endeavors are directed towards building machine learning based consumer products, particularly - recommendation and personalization. 
-				I have also dabbled in computational biology spending 2 years at <a href="http://www.maizegenetics.net/" target="_blank">Buckler Lab @ Cornell University</a> where I worked on the problems at the intersection of machine learning and bioinformatics.
-			</p> 
-	
-			<p>
-				I dropped-out from a PhD program in pure mathematics after 3.5 years at Kansas State University. 
-				I studied algebraic & differential geometry (particularly <a href="https://en.wikipedia.org/wiki/Donaldson%E2%80%93Thomas_theory"> Donaldson-Thomas Invariants and their wall crossing phenomenon</a>).
-				Some of my writings of this period are <a href="https://github.com/Jverma/Mathematics-Writings/blob/master/CYmanifolds.pdf">Geometry of Calabi-Yau Manifolds</a>, <a href="https://github.com/januverma/Mathematics-Writings/blob/master/TopologicalModels.pdf">Topological Sigma Models</a>. 
+    <section class="contact" id="contact">
+        <div class="contact-bg">connect</div>
+        <div class="contact-content">
+            <span class="contact-label">Say Hello</span>
+            <h2 class="contact-title">Let's <span class="italic">talk</span></h2>
+            <p class="contact-text">
+                Always interested in conversations about AI research, interesting problems, or potential collaborations.
+            </p>
+            <a href="mailto:j.verma5@gmail.com" class="contact-email">j.verma5@gmail.com</a>
+            
+            <div class="social-row">
+                <a href="https://github.com/januverma" target="_blank" class="social-btn" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://januverma.substack.com" target="_blank" class="social-btn" aria-label="Substack">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+                    </svg>
+                </a>
+                <a href="https://linkedin.com/in/januverma" target="_blank" class="social-btn" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+                <a href="https://twitter.com/januverma" target="_blank" class="social-btn" aria-label="X">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
 
-			</p>
-			<p>
-				I graduated with a MMath (Part III of the Mathematical Tripos) from University of Cambridge in the UK. To read more about some of the quirks and idiosyncrasies of the mathematical tripos see <a href="https://en.wikipedia.org/wiki/Mathematical_Tripos">here</a>. 
-				While at Cambirdge, my interests were in string theory and black holes in higher dimensions. I wrote my <a href="https://www.maths.cam.ac.uk/postgrad/part-iii/current/examinations-and-essays#Essay"> Part III essay </a> on <a href="https://en.wikipedia.org/wiki/AdS/CFT_correspondence">AdS/CFT Correspondence</a> & <a href="https://en.wikipedia.org/wiki/Holographic_principle">holography</a>. 
-				My essay can be found <a href="https://www.dropbox.com/s/jjpagly5421z0tf/jj.pdf?dl=0">here</a>.
-			</p>
-			<p>
-				During my time at K-State, I became interested in machine learning in pursuit of more applied sciences. 
-				I took some ML courses and collaborated on research with a local ML research group. I developed a particular interest in NLP, graph theory, and geometric approaches for data analysis.
-			</p>
-			<p>
-				During my undergraduate studies in India, I have interned in theoretical physics research labs at <a href="http://www.tifr.res.in/">Tata Institute of Fundamental Research </a> - Mumbai, and at <a href="http://www.jncasr.ac.in/">Jawaharlal Nehru Center for Advanced Scientific Research</a> - Bangalore. 
-			</p>
-			<p>
-				Outside the world of mathematics, my affinities are towards coffee, mountains, books, fitness, running, and cycling. I tweet at <a href="https://twitter.com/januverma" target="_blank">@januverma</a> 
-			</p>
-		</p>
-	</div>
-	<hr>
+    <footer>
+        <span>© 2025 Janu Verma</span>
+        <span>London</span>
+    </footer>
 
+    <script>
+        // Scroll reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -80px 0px'
+        });
 
+        revealElements.forEach(el => observer.observe(el));
 
-	<div class="research">
-		<h2 class="name1">Research</h2>
-		My research revolves around understanding complex data from diverse fields using mathematics and machine learning. Recently, I have take keen interest in graph neural networks, semi-supervised learning, and transformer models.
-		<br>
-		</br>
+        // Nav background change based on section
+        const navbar = document.getElementById('navbar');
+        const darkSections = document.querySelectorAll('.ideas, .contact');
+        
+        function updateNav() {
+            const scrollY = window.scrollY;
+            
+            if (scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            let inDarkSection = false;
+            darkSections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 60 && rect.bottom >= 60) {
+                    inDarkSection = true;
+                }
+            });
+            
+            if (inDarkSection) {
+                navbar.classList.add('dark-section');
+            } else {
+                navbar.classList.remove('dark-section');
+            }
+        }
 
-		<div class="project_left">
-			<h2 class="project_name">Publications</h2>
-			
-			<div class="paper">
-				<ul>
-					<li>Garima Arora, Adarsh Patankar, Akash Chaudhry, <b>Janu Verma</b> <i><a href="" target="_blank">Label-aware sampling using Contrastive Learning for GNN-based Fraud Detection</a>,</i> MLF at <b>KDD</b> 2022.
-				</ul>
-			</div>
-			
-			<div class="paper">
-				<ul>
-					<li>Awanish Kumar, Soumyadeep Ghosh, <b>Janu Verma</b><i><a href="" target="_blank">Guided Self-training based Semi-supervised Learing for Fraud Detection</a>,</i> ICAIF 2022.
-				</ul>
-			</div>
-			
-			<div class="paper">
-				<ul>
-					<li>Soumyadeep Ghosh, Sourojit Bhaduri, Sanjay Kumar, <b>Janu Verma</b>, Yatin Katyal, Ankur Saraswat<i><a href="" target="_blank">A Semi-supervised Vulnerability Management System</a>,</i> IntelliSys 2022.
-				</ul>
-			</div>
-			
-			<div class="paper">
-				<ul>
-					<li>Soumyadeep Ghosh, Sanjay Kumar, <b>Janu Verma</b>, Awanish Kumar <i><a href="https://arxiv.org/pdf/2107.08211.pdf" target="_blank">Self Training with Ensemble of Teacher Models</a>,</i> WSRL at <b>IJCAI</b> 2021.
-				</ul>
-			</div>
-			
-			<div class="paper">
-				<ul>
-					<li>Debasmita Das, Yatin Katyal, <b>Janu Verma</b>, Rajesh Kumar Ranjan, Shashank Dubey, Aakash Deep Singh, Sourojit Bhaduri, Kushagra Agarwal <i><a href="" target="_blank">Information retrieval and extraction on covid-19 clinical articles using graph community detection and bio-bert embeddings</a>,</i> Workshop on NLP for COVID-19 at <b>ACL</b> 2020.
-				</ul>
-			</div>
-			
-	
-			
-			<div class="paper">
-				<ul>
-					<li><b>Janu Verma</b> <i><a href="./static/pdfs/Enriched_network_embeddings_Janu_Verma.pdf" target="_blank">Enriched Network Embeddings for News Recommendation</a>,</i> INRA Workshop, RecSys Sept. 2019.
-				</ul>
-			</div>
-
-
-			<div class="paper">
-				<ul>
-					<li><b>Janu Verma</b>, Srishti Gupta, Deebdoot Mukherjee, Tanmoy Chakraborty <i><a href="https://arxiv.org/abs/1902.03124" target="_blank">Heterogeneous Edge Embeddings for Friend Recommendation</a>,</i> ECIR, April 2019.
-				</ul>
-			</div> 
-
-			<div class="paper">
-				<ul>
-					<li>Bum Chul Kwon, Ben Eysenbach, <b>Janu Verma</b>, Kenney Ng, Christopher deFilippi, Walter F. Stewart, and Adam Perer <i><a href="" target="_blank">Clustervision: Visual Supervision of Unsupervised Clustering</a>,</i> IEEE Vis, October 2017.
-			</div>
-			<div class="paper">
-				<ul>
-					<li>Bum Chul Kwon, Ben Eysenbach, <b>Janu Verma</b>, Kenney Ng, and Adam Perer <i><a href="./static/pdfs/idea2017_clustervision.pdf" target="_blank">Interactive Unsupervised Clustering with Clustervision</a>,</i> KDD IDEA Workshop, August 2017</li>
-				</ul>
-			</div>
-
-			<div class="paper">
-				<ul>
-					<li>Bum Chul Kwon, <b>Janu Verma</b>, Adam Perer <i><a href="./static/pdfs/idea2016_peekquence.pdf" target="_blank">Peekquence: Visual Analytics for Event Sequence Data</a>,</i> KDD IDEA Workshop August 2016.
-				</ul>
-			</div>	
-			<div class="paper">
-				<ul>
-					<li>Adam Perer, Bum Chul Kwon, <b>Janu Verma</b> <i><a href="./static/pdfs/event2016_peekquence.pdf" target="_blank">The Critical Role of Data Mining for Analyzing Real-World Event Sequences</a>,</i> IEEE Vis Workshop on Temporal and Sequential Event Analysis, October 2016</li>
-				</ul>
-			</div> 	
-			<div class="paper"> 
-				<ul>
-					<li>Bum Chul Kwon, <b>Janu Verma</b>, Adam Perer <i><a href="./static/pdfs/vahc2016_peekquence.pdf" target="_blank">Peeking into Patterns of Clinical Event Sequences with Peekquence</a>,</i> Visual Analytics in HealthCare (VAHC) Novemeber 2016</li>
-				</ul>
-			</div>
-
-			<div class="paper">
-			<ul>
-				<li>Bum Chul Kwon, <b>Janu Verma</b>, Peter J. Haas, Cagatay Demiralp <i><a href="./static/pdfs/sampling_cga.pdf" target="_blank">Sampling for Scalable Visual Analytics</i></a>, IEEE Computer Graphics and Application, Jan 2017.</li>
-			</ul>
-		</div>
-
-			<div class="papers">
-				<ul>
-					<li><b>Janu Verma</b>, Heng Luo, Jianying Hu, Ping Zhang <i><a href="" target="_blank">DrugPathSeeker: Interactive UI for Exploring Drug-ADR Relation via Pathways</a>,</i> PacificVis 2017</li>
-				</ul>
-			</div>
-
-			<div class="papers">
-				<ul>
-					<li><b>Janu Verma</b>, Bum Chul Kwon, Yu Cheng, Soumya Ghosh, Kenney Ng <i><a href="./static/pdfs/ichi2016.pdf" target="_blank">Classification of HealthCare Forum Messages</a>,</i> International Conference on HealthCare Informatics (ICHI) 2016</li>
-				</ul>
-			</div>
-
-			<div class="papers">
-				<ul>
-					<li>Shang Xue, Funda Ogut, Zachary Miller, <b>Janu Verma</b>, Peter Bradbury, James Holland <i><a href="http://biorxiv.org/content/early/2017/01/09/099291" target="_blank">Comparison of one-stage and two-stage genome-wide association studies</a>,</i> Submited to Genes|Genomes|Genetics: G3</li>
-				</ul>
-			</div>
-
-			<div class="papers">
-				<ul>
-					<li>Punna Ramu, Williams Esuma, Robert Kawuki, Ismail Rabbi, Chiedozie Egesi, Jessen V Bredeson, Rebecca Bart, <b>Janu Verma</b>, Edward Buckler, Fei Lu <i><a href="https://www.nature.com/ng/journal/vaop/ncurrent/full/ng.3845.html" target="_blank">Cassava haplotype map highlights fixation of deleterious mutations during clonal propagation</a>,</i> Nature Genetics, April 2017</li>
-				</ul>
-			</div>
-			<div class="paper">
-				<ul> 
-					<li>R. Punna, F. Lu, <b>J.Verma</b>, E. Buckler <i>Identifying genetic load by whole genome and transcriptome sequencing of Cassava breading lines,</i> Plant and Animal Genomics XXIII 2015, San Diego, CA</li>
-				</ul>
-			</div>
-
-				<div class="papers">
-				<ul>
-					<li>D. Kabra, <b>J. Verma</b>, N.S. Vidhyadhiraja, K.S. Narayan <i>Model for study of lateral photovolatic effect in ploymeric semiconductors,</i> IEEE Sensors Journal Vol.8, Issue 10 (1663)</li>
-<!-- 					<li><b>J. Verma, D. Kabra, N.S. Vidhyadhiraja, K.S. Narayan</b> <i>A study of charge carrier transport in disordered organic films,</i>MESODIS 2006, Kanpur India</li> -->
-				</ul>
-				</div>
-		</div>
-
-	</div>
-	
-
-	<hr>
-
-
-	<div class="talks">
-		<h2 class="name1">Exposition</h2>
-		<p class="talk">Notes: <a href="https://github.com/januverma/januverma.github.io/blob/master/static/pdfs/Graph%20Transformers.pdf" target="_blank">Modern Developments in Graph Transfomers</a></p>
-		<p class="talk">Blog: <a href="https://jverma.github.io/manifold-learning/" target="_blank">Mathematical Introduction to Manifold Learning</a></p>
-
-		<p class="talk">Blog: <a href="https://blog.hike.in/networking-d06f58aa3f3e" target="_blank">Friend Recommendation at Hike</a></p>
-
-		<p class="talk">Blog: <a href="https://medium.com/markovian-labs/linear-regression-frequentist-and-bayesian-447f97c8d330">Linear Regression: Frequentist and Bayesian</a></p>
-		
-		<p class="talk">Code: <a href="https://github.com/januverma/recommendation" target="_blank">Graph Embedding Approaches to Recommendation</a></p>
-		
-		<p class="talk">Code: <a href="https://github.com/Jverma/cnn-text-classification-keras" target="_blank">Convolutional Neural Network for Text Classification in Keras</a></p>
-		
-<!-- 		<p class="talk">Technical Article: <a href="https://github.com/januverma/Mathematics-Writings/blob/master/CYmanifolds.pdf" target="_blank">Geometry of Calabi-Yau Manifolds</a></p> -->
-		
-		
-	</div> 
-
-
-	<hr>
-
-
-
-	<div class="talks">
-		<h2 class="name1">Talks</h2>
-		<p class="talk"><b>Graph Embedding Methods for Recommendation Systems</b>, <i>Data Hacks Summit, Analytics Vidhya, Bengaluru</i>, Nov 2019</p>
-		<p class="talk"><b>Transfer Learning in NLP</b>, <i>PyData Delhi 2019</i>, August 2019 </p>
-		<p class="talk"><b>Beyond QWERTY: Solving the Input Problem of India</b>, <i>Future of Work, YourStory, Bengaluru</i>, Feb 2019 
-		<p class="talk"><b>Nuts and Bolts of Image Recognition</b>, <i>Software Technology Park of India, Mohali, Chandigarh</i>, Feb 2019 <span class="pdf"><a href="./static/pdfs/eduwaive.pptx" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>ImageNet and Image Recognition</b>, <i>Innvovicon, Bharti Vidya Peeth, New Delhi</i>, Feb 2019 <span class="pdf"><a href="./static/pdfs/bvp.pdf" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>Case for Open Data in Machine Learning</b>, <i>Panjab University, Chandigarh</i>, Sept 2018 <span class="pdf"><a href="./static/pdfs/opendata.pdf" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>Social Bias in Machine Learning</b>, <i>PyData Delhi 2018</i>, August 2018 <span class="pdf"><a href="./static/pdfs/pydata2018.pdf" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>Word Embeddings and NLP</b>, <i>Netaji Subhash Insititute of Technology</i>, April 2018 <span class="pdf"><a href="./static/pdfs/word_embeddings_nsit.pdf" target="_blank">Slides</a></span></p>
-<!-- 		<p class="talk"><i>Data Visualization; Theory and Practices</i>, <b>PyData Delhi Meetup</b>, Feb 2018 <span class="pdf"><a href="./static/pdfs/dataviz_pydata.pdf" target="_blank">Slides</a></span></p> -->
-		<p class="talk"><b>Data Driven Healthcare</b>, <i>Indraprastha Institute of Information Technology (IIIT), New Delhi</i>, Dec 2017 <span class="pdf"><a href="" target="_blank">Slides</a></span></p>
-<!-- 		<p class="talk"><i>Network Visualizations</i>, <b>Annual AICTE Seminar on Machine Learning and HCI, Maharaja Surajmal Institute of Technology, New Delhi</b>, Nov 2017 <span class="pdf"><a href="." target="_blank">Slides</a></span></p> -->
-		<p class="talk"><b>Improving Healthcare with Data Science</b>, <i>Facebook Dev Circle, New Delhi</i>, Oct 2017 <span class="pdf"><a href="./static/pdfs/healthcare.pdf" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>Data Science in Healthcare</b>, <i>Cluster Innovation Center, University of Delhi</i>, Sept 2017 <span class="pdf"><a href="./static/pdfs/cic.pdf" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>Understanding Clustering: Supervising the Unsupervised</b>, <i>PyData Delhi 2017</i>, Sept 2017 <span class="pdf"><a href="./static/pdfs/PyDataDelhi2017.pdf" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>Word Vector Representations (word2vec) and Text Classification,</b> <i>ML-India</i>, Jan 2017, <span class="pdf"><a href="https://github.com/ML-India-Gurgaon-Chapter/Presentations/blob/master/7th%20Meetup%20-%20Janu%20Verma%2C%20IBM%2C%20NY.pdf" target="_blank">Slides</a></span></p>
-		<p class="talk"><b>Case for Data Visualization</b>, <i>DataViz Delhi</i>, Nov 2016 <span class="pdf"><a href="./static/pdfs/case_for_viz.key" target="_blank">Slides</a></span></p>
-<!-- 		<p class="talk"><i>Data Science in an Early Start-Up</i>, <b>Round One, New Delhi</b>, Oct 2016</p> -->
-<!-- 		<p class="talk"><i>Machine learning, data visualization, and software development in computational biology</i>, <b>IBM Research</b>, Sept 2015</p> -->
-<!-- 		<p class="talk"><i>Machine Learning with Scikit-Learn</i>, <b>Cornell Data Science Club</b>, Sept 2014</p> -->
-<!-- 		<p class="talk"><i>Author identification in double blind review process</i>, <b>Institute of Biotechnology, Cornell University</b>, Jan 2014</p> -->
-<!-- 		<p class="talk"><i>Moduli Space of Multi-centered Black Holes and Quiver Representations</i>, <b>University of Kansas</b>, May 2013</p> -->
-<!-- 		<p class="talk"><i>Motivic Donaldson-Thomas invariants and Kac Conjecture</i>, <b>Institute of Mathematical Sciences, Chennai</b>, Dec 2012</p> -->
-	</div>
-
-	<hr>
-<!-- 
-
-	<div class="projects">
-		<h2 class="name1">Fun Projects</h2>
-
-		<div class="project_right">
-			<h3 class="project_name">Instagram Motifs</h3>
-			<img src="./static/images/instagram.jpg" height="200" width="300">
-			<br></br>
-			<p class="section">Visual analysis of all my Instagram posts using deep convolutional neural networks and 2d tsne visualization.</p>
-			<div class="papers">
-				<a href="https://jverma.github.io/instagram-motifs/" target="_blank" class="proj_link">Demo</a> | <a href="https://github.com/Jverma/instagram-motifs" target="_blank" class="proj_link">code</a>
-			</div>
-		</div>
-		<hr>
-
-		<div class="project_right">
-			<h3 class="project_name">MCMC Play</h3>
-			<img src="./static/images/mcmc_play.png" height="300" width="500">
-			<br></br>
-			<p class="section">An interface for playing with Markov Chain Monte Carlo (MCMC) sampling methods. User can select one of two fitting functions - linear or quadratic. There is a control panel for choosing various parameters. On submission, the system shows two animating windows, one showing sampling in parameter space and other showing the fitting of the curve. More than inspired by tensoflow-play.</p>
-			<div class="papers">
-				<a href="http://markovianlabs.github.io/MCMC-Play/" target="_blank" class="proj_link">Demo</a> | <a href="https://github.com/markovianlabs/MCMC-Play" target="_blank" class="proj_link">code</a>
-			</div>
-		</div>
-		<hr>
-
-
-
-		<div class="project_right">
-			<h3 class="project_name">Visa Free</h3>
-			<img src="./static/images/visa_free.png" height="300" width="500">
-			<br></br>
-			<p class="section">Visual representation of the visa network as a Hive Plot layout. The visual shows all visa situations from each country in a source continent to the destinataion continent. The visa types - free, on arrival, required, refused - form an axis in the system. Different colors encodes the visa types. There are various interaction components e.g. highlighting of an edge on hover, click on nodes opens the list of edges emanating from it.</p>
-			<div class="papers">
-				<a href="https://jverma.github.io/visa_network/" target="_blank" class="proj_link">Demo</a> | <a href="https://github.com/Jverma/visa_network" target="_blank" class="proj_link">Code</a>
-			</div>
-		</div>
-		<hr> -->
-
-
-		<!-- <div class="project_right">
-			<h3 class="project_name">GFF vis</h3>
-			<img src="./static/images/gff_vis.png" height="300" width="500">
-			<br></br>
-			<p class="section">Genome Feature Format (gff) is the standard format for storage and transfer of genomic annotation data, which means positions of chromosomes, genes, RNA etc. on the genome. This visualization uses collapsible tree layout. This captures the hierarchy in the genomic features and the collapsibility helps in save space and focus on portion of concern.</p>
-			<div class="papers">
-			<a href="http://bl.ocks.org/Jverma/4d8d73ad5f2bb39bab53" target="_blank" class="proj_link">Demo</a> | <a href="https://github.com/Jverma/Visualizing-genome-annotations" target="_blank" class="proj_link">Code</a>
-			</div>
-		</div>
-		<hr> -->
-
-		<!-- <div class="project_right">
-			<h3 class="project_name">SEMPS: Cosmological Power Spectra using Machine Learning</h3>
-			<img src="./static/images/semps.png" height="300" width="500">
-			<br></br>
-			<p class="section">
-				Built machine learning (gradient boosted trees) models for prediction of power spectra based on the cosmological attributes.
-			</p>
-			<div class="papers">
-				<a href="http://www.ics.uzh.ch/~irshad/semps/" target="_blank" class="proj_link">Demo</a> | <a href="http://arxiv.org/abs/1507.04622" target="_blank" class="proj_link">Read</a>
-			</div>
-		</div> -->
-
-
-
-	</div>
-	<hr>
-
-
-
-	<div class="writing">
-		<h2 class="name1">Media</h2>
-		<ul>
-			<li><a href="https://yourstory.com/2019/02/hike-replace-keyboard-stickers">Can Hike replace the keyboard with stickers? Janu Verma on solving India’s input problem.</a></li>
-			<li> <a href="https://ducic.ac.in/cdn/ducic/NewsEventsCommons/janu.pdf">Leadership Lecture Series - Janu Verma.</a></li>
-			<li> <a href="https://news.cornell.edu/stories/2017/04/cassava-genetically-decaying-putting-staple-crop-risk">Cassava is genetically decaying, putting staple crop at risk.</a></li>
-			<li> <a href="https://www.analyzedata.co/the-nuts-and-bolts-of-image-recognition-with-janu-verma/">The Nuts and Bolts of Image Recognition – With Janu Verma.</a> </li>
-<!-- 			<li> <a href=""> </a> </li>
-			<li> <a href=""> </a> </li>
-			<li> <a href=""> </a> </li> -->
-		</ul> 
-	</div>
-
-
-
-
-
-
-
+        window.addEventListener('scroll', updateNav);
+        updateNav();
+    </script>
 </body>
+</html>
