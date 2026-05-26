@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Strategist — Janu Verma</title>
+    <meta name="description" content="A two-stage multimodal pipeline using Gemma 4 to analyze Instagram reels and surface real content strategy.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav id="navbar">
+        <a href="../index.html" class="nav-name">Janu Verma</a>
+        <div class="nav-links">
+            <a href="../index.html#story">About</a>
+            <a href="../index.html#ideas">Writing</a>
+            <a href="../index.html#projects">Projects</a>
+            <a href="../index.html#speaking">Speaking</a>
+            <a href="../index.html#contact">Contact</a>
+        </div>
+    </nav>
+
+    <section class="project-hero">
+        <a href="../index.html#projects" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            All projects
+        </a>
+
+        <div class="project-eyebrow">
+            <span>02 / Project</span>
+            <span class="dot"></span>
+            <span>Live</span>
+        </div>
+
+        <h1 class="project-name">Instagram <span class="italic">Strategist</span></h1>
+
+        <p class="project-tagline-big">
+            A two-stage multimodal pipeline that watches my Instagram reels, finds the through-line in my content, and tells me who I'm really making things for — strategy grounded in actual video, not generic advice.
+        </p>
+
+        <div class="project-links">
+            <a href="https://github.com/januverma/instagram-strategist" target="_blank" class="project-link primary">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                View on GitHub
+            </a>
+            <a href="https://januverma.substack.com/p/i-gave-gemma-4-my-instagram-reels" target="_blank" class="project-link">
+                Read the writeup
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <div class="project-body">
+        <section class="project-section">
+            <span class="section-label">The Problem</span>
+            <h2 class="section-headline">Creators can't see their own <span class="italic">patterns</span>.</h2>
+            <div class="prose">
+                <p>
+                    If you make content on Instagram, the advice you get is either generic — <em>"post consistently, use hooks, add a CTA"</em> — or it's expensive, the kind agencies sell. Neither tells you what's actually happening across your own videos. What you keep returning to. Who, specifically, is on the other side of the camera when you press record.
+                </p>
+                <p>
+                    I wanted to know if a multimodal model could do that work for me. So I gave Gemma 4 twelve of my reels and asked it to read them — not the captions, the videos themselves — and tell me what I was making.
+                </p>
+            </div>
+
+            <blockquote class="pullquote">
+                I ended up building a prototype that analyzed my Instagram reels, identified the through-line in my content, and reframed who I was making it for.
+            </blockquote>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Architecture</span>
+            <h2 class="section-headline">Two stages: <span class="italic">extract</span>, then <span class="italic">reason</span>.</h2>
+            <div class="prose">
+                <p>
+                    The pipeline runs in two distinct passes. Stage one is per-reel extraction: each video goes through six to eight focused passes that pull out hooks, pacing, visual quality, audio cues, on-screen text, and the moment-to-moment structure of the clip. Each reel produces a structured JSON sidecar.
+                </p>
+                <p>
+                    Stage two is cross-reel meta-analysis. With every video reduced to structured signals, the model can now reason across the whole corpus — finding content clusters, picking up voice, correlating what works with what gets ignored. The split matters: extraction is cheap and parallelizable, reasoning is where the strategy actually lives.
+                </p>
+            </div>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!AlGL!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5daf3ac0-e114-4b0f-84f7-4bdd143a9bb6_1536x1024.png" alt="Two-stage pipeline architecture diagram">
+                <figcaption>The two-stage pipeline — per-reel extraction feeds cross-reel reasoning.</figcaption>
+            </figure>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">The Models</span>
+            <h2 class="section-headline">Two variants of <span class="italic">Gemma 4</span>, one job each.</h2>
+            <div class="prose">
+                <p>
+                    Gemma 4 ships in multiple variants. The <strong>31B</strong> model handles video — heavier, slower, but it's the one that can actually watch a clip and tell you what's in it. The smaller <strong>E4B</strong> model handles audio, transcription, and the lighter signal extraction. Both run locally on a single A100 80GB.
+                </p>
+                <p>
+                    All outputs are structured JSON. That's the design choice that makes the second stage possible — once everything is structured, the cross-reel pass can correlate features, cluster reels, and produce strategy with citations back to specific videos.
+                </p>
+            </div>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!4FOs!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2a131d9e-2db6-4a95-948a-e1224a3dc103_1448x480.heic" alt="Gemma 4 model variants comparison">
+                <figcaption>The two variants — 31B for video, E4B for audio and lighter signals.</figcaption>
+            </figure>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">What It Found</span>
+            <h2 class="section-headline">The <span class="italic">intellectual ritualist</span>.</h2>
+            <div class="prose">
+                <p>
+                    I expected a list of stats. What I got was a reframing. Across twelve reels, the model identified three content clusters, found a consistent voice underneath them, and named the audience: <em>The Intellectual Ritualist</em> — someone who performs curated rituals of the mind. Coffee, books, slow mornings, deliberate gestures.
+                </p>
+                <p>
+                    It also flagged what wasn't there: <strong>zero call-to-actions across all twelve reels</strong>. And instead of suggesting the generic <em>"ask viewers to comment"</em>, it proposed persona-aligned alternatives — asking about brewing preferences, asking what they're reading, the kind of prompt that belongs to the ritual rather than interrupting it.
+                </p>
+            </div>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!2k2w!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8600fc77-abe8-4bc5-806f-b3127e2edc37_1536x1024.png" alt="Three content clusters identified across the reels">
+                <figcaption>The three content clusters the model found across twelve reels.</figcaption>
+            </figure>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Capabilities</span>
+            <h2 class="section-headline">What the pipeline does.</h2>
+
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-number">01</div>
+                    <h3>Per-reel extraction</h3>
+                    <p>Six to eight focused passes per video — hooks, pacing, visual quality, audio cues, on-screen text. Structured JSON output per reel.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-number">02</div>
+                    <h3>Cross-reel meta-analysis</h3>
+                    <p>Reasoning across the full corpus to find content clusters, voice, and correlations between features and engagement.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-number">03</div>
+                    <h3>Conversational Q&A</h3>
+                    <p>A layer on top of the analysis that lets you ask follow-up strategy questions — grounded in the specific reels, not generic templates.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-number">04</div>
+                    <h3>Persona-aligned suggestions</h3>
+                    <p>Strategy that belongs to your voice — call-to-actions, hooks, and prompts shaped by the audience the model has identified.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Under the Hood</span>
+            <h2 class="section-headline">How it's <span class="italic">built</span>.</h2>
+
+            <div class="stack-grid">
+                <div class="stack-item">
+                    <div class="label">Video Model</div>
+                    <div class="value">Gemma 4 (31B)</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Audio Model</div>
+                    <div class="value">Gemma 4 (E4B)</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Hardware</div>
+                    <div class="value">A100 80GB</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Language</div>
+                    <div class="value">Python</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Storage</div>
+                    <div class="value">JSON Sidecars</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Output</div>
+                    <div class="value">Structured JSON</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Architecture</div>
+                    <div class="value">Two-stage</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">License</div>
+                    <div class="value">Open Source</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="next-project">
+        <span class="label">Previous Project</span>
+        <h2>A conversational<br><span class="italic">book recommender</span></h2>
+        <a href="marginalia.html" class="arrow-link">
+            See Marginalia
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </section>
+
+    <footer>
+        <span>© 2025 Janu Verma</span>
+        <span>London</span>
+    </footer>
+
+    <script>
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+        revealElements.forEach(el => observer.observe(el));
+
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+    </script>
+</body>
+</html>

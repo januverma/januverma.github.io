@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marginalia — Janu Verma</title>
+    <meta name="description" content="A conversational book recommender that maps your taste, not the crowd's. Built with Python, Claude, and SQLite.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav id="navbar">
+        <a href="../index.html" class="nav-name">Janu Verma</a>
+        <div class="nav-links">
+            <a href="../index.html#story">About</a>
+            <a href="../index.html#ideas">Writing</a>
+            <a href="../index.html#projects">Projects</a>
+            <a href="../index.html#speaking">Speaking</a>
+            <a href="../index.html#contact">Contact</a>
+        </div>
+    </nav>
+
+    <section class="project-hero">
+        <a href="../index.html#projects" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            All projects
+        </a>
+
+        <div class="project-eyebrow">
+            <span>01 / Project</span>
+            <span class="dot"></span>
+            <span>Live</span>
+        </div>
+
+        <h1 class="project-name">Margi<span class="italic">nalia</span></h1>
+
+        <p class="project-tagline-big">
+            A conversational book recommender that takes a feeling, a question, a theme, or a mood — and suggests two or three books, chosen by something that learns your taste the way a friend would.
+        </p>
+
+        <div class="project-links">
+            <a href="https://github.com/januverma/marginalia" target="_blank" class="project-link primary">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                View on GitHub
+            </a>
+            <a href="https://januverma.substack.com/p/marginalia-a-conversational-book" target="_blank" class="project-link">
+                Read the writeup
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <div class="project-body">
+        <section class="project-section">
+            <span class="section-label">The Problem</span>
+            <h2 class="section-headline">Recommenders optimize for <span class="italic">similarity</span>. Taste is something else.</h2>
+            <div class="prose">
+                <p>
+                    Most book recommenders work the same way: <em>given what you already liked, here's more like it.</em> They're built for scale, not for taste. The result is an echo chamber — the same books circling back to you in slightly different shapes, the same algorithmic popularity bubble dressed up as personalization.
+                </p>
+                <p>
+                    But the way I actually find books is closer to a conversation with a knowledgeable friend. Someone who knows what I've read, hears the mood I'm in, and suggests two or three things — sometimes safe, sometimes a stretch. Someone who builds an evolving picture of who I am as a reader. Marginalia is my attempt to make that.
+                </p>
+            </div>
+
+            <blockquote class="pullquote">
+                I built a conversational book recommender. It takes a feeling, a question, a theme, or a mood — and suggests two or three books.
+            </blockquote>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">In Use</span>
+            <h2 class="section-headline">A conversation, not a query.</h2>
+            <div class="prose">
+                <p>
+                    You don't pick filters or browse categories. You write the way you'd write to a friend — <em>"something for the last week of winter"</em>, <em>"a book that reads like a long walk"</em>, <em>"I want to understand grief without drowning in it"</em>. The system reads the request, reaches into what it knows about you, and comes back with a small handful of suggestions, each with its own reason for being there.
+                </p>
+            </div>
+
+            <figure class="project-figure figure-narrow">
+                <img src="https://substackcdn.com/image/fetch/$s_!8jAa!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F693b7ff5-8763-4a04-a4a5-10165f4c0b30_1496x1136.heic" alt="Example conversational prompts to Marginalia">
+                <figcaption>Sample conversational prompts — moods and questions instead of filters.</figcaption>
+            </figure>
+
+            <figure class="project-figure figure-narrow">
+                <img src="https://substackcdn.com/image/fetch/$s_!K_09!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1f7ed98b-0d2c-4e1d-b341-15c81292d798_820x1402.heic" alt="Marginalia book recommendation response">
+                <figcaption>A response: two or three books, each with a reason.</figcaption>
+            </figure>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Four Personas</span>
+            <h2 class="section-headline">The same data, four different <span class="italic">librarians</span>.</h2>
+            <div class="prose">
+                <p>
+                    The same reading history can be read in different ways. Marginalia lets you choose the voice doing the reading — four personas that produce meaningfully different suggestions from identical data.
+                </p>
+            </div>
+
+            <div class="personas-grid">
+                <div class="persona">
+                    <h4>The Sage</h4>
+                    <p>Deeper, slower, more considered — pulls from the canon and the philosophical shelves. Good for when you want a book to sit with.</p>
+                </div>
+                <div class="persona">
+                    <h4>The Bookseller</h4>
+                    <p>The friend at the independent bookstore who reads everything new. Curated taste, contemporary leanings, knows what's just out.</p>
+                </div>
+                <div class="persona">
+                    <h4>The Provocateur</h4>
+                    <p>Pushes against your patterns. Suggests the book outside your comfort zone — the one that argues with what you already believe.</p>
+                </div>
+                <div class="persona">
+                    <h4>The Companion</h4>
+                    <p>Matches you where you are. Reads the emotional weather of the request and suggests something kind, something close.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Taste Portrait</span>
+            <h2 class="section-headline">A picture of <span class="italic">how</span> you read.</h2>
+            <div class="prose">
+                <p>
+                    Every so often, Marginalia writes a prose portrait of your taste — not a list of genres, but a narrative observation of what you keep returning to, what you avoid, where you've drifted lately. It refreshes as your reading evolves, so the picture is never stale.
+                </p>
+            </div>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!NAup!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa070b44f-8a9d-4ac6-b89c-f78a648c3b6e_1474x312.heic" alt="Marginalia taste portrait highlights">
+                <figcaption>Highlights extracted from accumulated reading data.</figcaption>
+            </figure>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!W7dP!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd8ecc1cb-0187-4c45-a0af-a4980d6036bc_2330x746.heic" alt="Prose portrait of reader's taste">
+                <figcaption>The prose portrait — observations rendered as narrative, not metadata.</figcaption>
+            </figure>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Theme Constellation</span>
+            <h2 class="section-headline">Reading is a map, not a list.</h2>
+            <div class="prose">
+                <p>
+                    Beyond the prose, there's a visualization: a constellation of themes pulled from across your books, connected where they overlap. You can pull on a node and see which books sit underneath it, where it touches other themes, where the gaps are. It's the structure of your reading made visible.
+                </p>
+            </div>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!MvcT!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc5bf2aae-1d33-4760-8145-f72ff49fc60f_2262x1396.heic" alt="Theme constellation visualization">
+                <figcaption>The constellation — themes as nodes, connections as overlaps.</figcaption>
+            </figure>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!S6TU!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc7cabac4-2a28-4a03-a582-03672c8688a5_2094x1052.heic" alt="Constellation node expanded">
+                <figcaption>Expanding a node reveals the books underneath and adjacent themes.</figcaption>
+            </figure>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Initiative</span>
+            <h2 class="section-headline">When the librarian <span class="italic">asks first</span>.</h2>
+            <div class="prose">
+                <p>
+                    A real librarian wouldn't just answer questions — they'd notice things. Marginalia does the same: when it detects a shift in your reading patterns (a sudden swerve toward grief, a new fixation on a place, a long absence from fiction), it surfaces a perceptive question of its own. The conversation goes both ways.
+                </p>
+            </div>
+
+            <figure class="project-figure figure-narrow">
+                <img src="https://substackcdn.com/image/fetch/$s_!YZOO!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffcb08227-a672-4495-a0d3-5dd7b7f2fcd8_1426x972.heic" alt="Marginalia asking a question of the reader">
+                <figcaption>A librarian-initiated question, drawn from shifts in recent reading.</figcaption>
+            </figure>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Under the Hood</span>
+            <h2 class="section-headline">How it's <span class="italic">built</span>.</h2>
+            <div class="prose">
+                <p>
+                    The recommender runs Claude Sonnet for the reasoning that produces suggestions, with Haiku handling the cheaper signal extraction — tagging themes, noticing patterns, keeping the taste portrait fresh. Web search is integrated through Claude's built-in tool, so the system can reach for what's just been published.
+                </p>
+                <p>
+                    State lives locally in SQLite — every book has a full lifecycle: <em>suggested → purchased → reading → read or abandoned</em>. There's no remote infrastructure, no analytics calls. Every API request reconstructs your full context from scratch, which means Anthropic never holds persistent state, and yet the system still gets sharper as your library grows.
+                </p>
+            </div>
+
+            <figure class="project-figure">
+                <img src="https://substackcdn.com/image/fetch/$s_!r1de!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F67acc9e4-1bf1-4e03-9338-32aa8592ae3d_1496x738.heic" alt="Marginalia data model schema">
+                <figcaption>The data model — tables for books, suggestions, lifecycle states, and themes.</figcaption>
+            </figure>
+
+            <div class="stack-grid">
+                <div class="stack-item">
+                    <div class="label">Reasoning</div>
+                    <div class="value">Claude Sonnet</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Signals</div>
+                    <div class="value">Claude Haiku</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Storage</div>
+                    <div class="value">SQLite</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Backend</div>
+                    <div class="value">Python</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Frontend</div>
+                    <div class="value">Vanilla JS + SVG</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Search</div>
+                    <div class="value">Claude Web Tool</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Infra</div>
+                    <div class="value">Local-only</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">License</div>
+                    <div class="value">Open Source</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="next-project">
+        <span class="label">Next Project</span>
+        <h2>I gave Gemma 4 my<br><span class="italic">Instagram reels</span></h2>
+        <a href="instagram-strategist.html" class="arrow-link">
+            Continue
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </section>
+
+    <footer>
+        <span>© 2025 Janu Verma</span>
+        <span>London</span>
+    </footer>
+
+    <script>
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+        revealElements.forEach(el => observer.observe(el));
+
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+    </script>
+</body>
+</html>

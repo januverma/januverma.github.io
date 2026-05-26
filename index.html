@@ -434,6 +434,178 @@
             background: var(--orange);
         }
 
+        /* Projects Section */
+        .projects {
+            background: var(--cream);
+            padding: 10rem 4rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .projects-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .projects-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
+            align-items: end;
+        }
+
+        .projects-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 400;
+            line-height: 1.05;
+        }
+
+        .projects-title .italic {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        .projects-intro {
+            max-width: 440px;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--gray);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.75rem;
+        }
+
+        .project-card {
+            background: var(--white);
+            border: 1px solid var(--light-gray);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            border-color: var(--black);
+            transform: translateY(-4px);
+        }
+
+        .project-card:hover .project-title {
+            color: var(--orange);
+        }
+
+        .project-card.placeholder {
+            background: transparent;
+            border-style: dashed;
+            cursor: default;
+        }
+
+        .project-card.placeholder:hover {
+            transform: none;
+            border-color: var(--light-gray);
+        }
+
+        .project-card.placeholder:hover .project-title {
+            color: var(--gray);
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .project-number {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--orange);
+        }
+
+        .project-status {
+            font-size: 0.55rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gray);
+            padding: 0.3rem 0.65rem;
+            border: 1px solid var(--light-gray);
+        }
+
+        .project-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.85rem;
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .project-card.placeholder .project-title {
+            color: var(--gray);
+        }
+
+        .project-tagline {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--black);
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+
+        .project-card.placeholder .project-tagline {
+            color: var(--gray);
+        }
+
+        .project-desc {
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tags span {
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gray);
+            padding: 0.35rem 0.7rem;
+            background: var(--cream);
+            border: 1px solid var(--light-gray);
+        }
+
+        .project-arrow {
+            align-self: flex-end;
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: var(--black);
+        }
+
+        .project-card:hover .project-arrow {
+            background: var(--black);
+            border-color: var(--black);
+            color: var(--white);
+        }
+
         /* Story Section */
         .story {
             padding: 12rem 4rem;
@@ -918,6 +1090,15 @@
                 flex-direction: column;
             }
 
+            .projects-header {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
             .story {
                 grid-template-columns: 1fr;
                 gap: 4rem;
@@ -951,9 +1132,14 @@
                 display: none;
             }
 
-            .hero, .ideas, .story, .research, .contact {
+            .hero, .ideas, .projects, .story, .research, .contact {
                 padding-left: 1.5rem;
                 padding-right: 1.5rem;
+            }
+
+            .project-card {
+                padding: 2rem;
+                min-height: auto;
             }
 
             .hero {
@@ -1011,6 +1197,7 @@
         <div class="nav-links">
             <a href="#story">About</a>
              <a href="#ideas">Writing</a>
+             <a href="#projects">Projects</a>
              <a href="#speaking">Speaking</a>
             <!-- <a href="#research">Research</a> -->
             <a href="#contact">Contact</a>
@@ -1058,21 +1245,21 @@
                 <h3 class="post-title">RecSys After LLMs: Four Paradigms for What Comes Next</h3>
                 <span class="post-meta">Research</span>
             </a>
-            <a href="https://januverma.substack.com/p/building-a-data-analysis-agent" target="_blank" class="post-item reveal">
-                <h3 class="post-title">Building a Data Analysis Agent</h3>
+            <a href="https://januverma.substack.com/p/llm-based-agents" target="_blank" class="post-item reveal">
+                <h3 class="post-title">LLM Based Agents</h3>
                 <span class="post-meta">Deep Dive</span>
             </a>
-            <a href="https://januverma.substack.com/p/multi-turn-tool-use-with-rl" target="_blank" class="post-item reveal">
-                <h3 class="post-title">Multi-Turn Tool Use with RL</h3>
-                <span class="post-meta">Research</span>
+            <a href="https://januverma.substack.com/p/game-theoretic-thinking-for-ai" target="_blank" class="post-item reveal">
+                <h3 class="post-title">Game Theoretic Thinking for AI</h3>
+                <span class="post-meta">Essay</span>
             </a>
-            <a href="https://januverma.substack.com/p/fine-tuning-llms-using-reinforcement" target="_blank" class="post-item reveal">
-                <h3 class="post-title">Fine-tuning LLMs using Reinforcement Learning</h3>
+            <a href="https://januverma.substack.com/p/research-briefings-gemma-4" target="_blank" class="post-item reveal">
+                <h3 class="post-title">Research Briefings — Gemma 4</h3>
                 <span class="post-meta">Series</span>
             </a>
-            <a href="https://januverma.substack.com/p/large-language-models-for-recommender" target="_blank" class="post-item reveal">
-                <h3 class="post-title">LLMs for Recommender Systems</h3>
-                <span class="post-meta">Series</span>
+            <a href="https://januverma.substack.com/p/what-a-time-to-be-alive" target="_blank" class="post-item reveal">
+                <h3 class="post-title">What a Time to Be Alive</h3>
+                <span class="post-meta">Reflection</span>
             </a>
         </div>
 
@@ -1083,6 +1270,80 @@
                 <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
         </a>
+    </section>
+
+    <section class="projects" id="projects">
+        <div class="projects-inner">
+            <div class="projects-header">
+                <h2 class="projects-title">
+                    Things I'm<br><span class="italic">building</span>
+                </h2>
+                <p class="projects-intro">
+                    Side projects at the edges of what language models can do — applied to my own books, my own videos, my own questions. Built to learn, shared to invite conversation.
+                </p>
+            </div>
+
+            <div class="projects-grid">
+                <a href="projects/marginalia.html" class="project-card reveal">
+                    <div class="project-meta">
+                        <span class="project-number">01 / Project</span>
+                        <span class="project-status">Live</span>
+                    </div>
+                    <h3 class="project-title">Marginalia</h3>
+                    <p class="project-tagline">A conversational book recommender.</p>
+                    <p class="project-desc">
+                        Tell it a feeling, a question, a mood — get back two or three books, chosen by a librarian-friend that builds a picture of your taste over time. Four personas, a prose taste portrait, and a theme constellation.
+                    </p>
+                    <div class="project-tags">
+                        <span>Python</span>
+                        <span>Claude</span>
+                        <span>SQLite</span>
+                    </div>
+                    <span class="project-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+
+                <a href="projects/instagram-strategist.html" class="project-card reveal">
+                    <div class="project-meta">
+                        <span class="project-number">02 / Project</span>
+                        <span class="project-status">Live</span>
+                    </div>
+                    <h3 class="project-title">Instagram Strategist</h3>
+                    <p class="project-tagline">I gave Gemma 4 my Instagram reels.</p>
+                    <p class="project-desc">
+                        A two-stage multimodal pipeline that watches your reels, finds the through-line in your content, and tells you who you're really making things for — strategy grounded in actual video, not generic advice.
+                    </p>
+                    <div class="project-tags">
+                        <span>Gemma 4</span>
+                        <span>Multimodal</span>
+                        <span>Python</span>
+                    </div>
+                    <span class="project-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+
+                <div class="project-card placeholder reveal">
+                    <div class="project-meta">
+                        <span class="project-number">03 / Project</span>
+                        <span class="project-status">Soon</span>
+                    </div>
+                    <h3 class="project-title">In the workshop</h3>
+                    <p class="project-tagline">Something is being built.</p>
+                    <p class="project-desc">
+                        The next project is taking shape — exploring how language models can reason over longer stretches of personal context. Details coming.
+                    </p>
+                    <div class="project-tags">
+                        <span>TBD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="story" id="story">
