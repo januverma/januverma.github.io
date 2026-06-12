@@ -5,7 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Janu Verma</title>
     <meta name="description" content="Writing about the ideas shaping AI. Principal Applied Scientist at Microsoft.">
-    
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://januverma.com/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://januverma.com/">
+    <meta property="og:title" content="Janu Verma">
+    <meta property="og:description" content="Writing about the ideas shaping AI. Principal Applied Scientist at Microsoft.">
+    <meta property="og:image" content="https://januverma.com/photo-small.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@januverma">
+    <meta name="twitter:title" content="Janu Verma">
+    <meta name="twitter:description" content="Writing about the ideas shaping AI. Principal Applied Scientist at Microsoft.">
+    <meta name="twitter:image" content="https://januverma.com/photo-small.jpg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -109,6 +123,51 @@
 
         .nav-links a:hover {
             color: var(--orange);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 28px;
+            height: 20px;
+            position: relative;
+            cursor: pointer;
+            z-index: 102;
+        }
+
+        .nav-toggle span {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--black);
+            transition: all 0.3s ease;
+        }
+
+        .nav-toggle span:first-child {
+            top: 4px;
+        }
+
+        .nav-toggle span:last-child {
+            bottom: 4px;
+        }
+
+        nav.dark-section .nav-toggle span {
+            background: var(--white);
+        }
+
+        nav.menu-open .nav-toggle span {
+            background: var(--black);
+        }
+
+        nav.menu-open .nav-toggle span:first-child {
+            transform: translateY(5px) rotate(45deg);
+        }
+
+        nav.menu-open .nav-toggle span:last-child {
+            transform: translateY(-5px) rotate(-45deg);
         }
 
         /* Hero */
@@ -289,88 +348,7 @@
             max-width: 400px;
             font-size: 0.9rem;
             line-height: 1.8;
-            color: rgba(255,255,255,0.5);
-        }
-
-        .ideas-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .idea-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 3rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-            min-height: 280px;
-        }
-
-        .idea-card:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: var(--orange);
-            transform: translateY(-4px);
-        }
-
-        .idea-card.featured {
-            grid-column: span 2;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 4rem;
-        }
-
-        .idea-card.featured .idea-content {
-            max-width: 600px;
-        }
-
-        .idea-number {
-            font-size: 0.6rem;
-            color: var(--orange);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        .idea-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 400;
-            line-height: 1.35;
-            margin-bottom: 1rem;
-        }
-
-        .idea-card.featured .idea-title {
-            font-size: 2.25rem;
-        }
-
-        .idea-desc {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.45);
-            line-height: 1.7;
-            margin-top: auto;
-        }
-
-        .idea-arrow {
-            width: 48px;
-            height: 48px;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-            align-self: flex-end;
-        }
-
-        .idea-card:hover .idea-arrow {
-            background: var(--orange);
-            border-color: var(--orange);
+            color: rgba(255,255,255,0.65);
         }
 
         .posts-list {
@@ -407,7 +385,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255,255,255,0.6);
             white-space: nowrap;
         }
 
@@ -1016,7 +994,7 @@
 
         .contact-text {
             font-size: 0.95rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.65);
             line-height: 1.8;
             margin-bottom: 3rem;
         }
@@ -1065,7 +1043,7 @@
         /* Footer */
         footer {
             background: var(--black);
-            color: rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.55);
             padding: 2rem 4rem;
             display: flex;
             justify-content: space-between;
@@ -1079,15 +1057,6 @@
             .ideas-header {
                 grid-template-columns: 1fr;
                 gap: 2rem;
-            }
-
-            .ideas-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .idea-card.featured {
-                grid-column: span 1;
-                flex-direction: column;
             }
 
             .projects-header {
@@ -1128,8 +1097,42 @@
                 padding: 1rem 1.5rem;
             }
 
+            .nav-toggle {
+                display: block;
+            }
+
             .nav-links {
-                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 101;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2.5rem;
+                background: var(--cream);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+
+            nav.menu-open .nav-links {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links a,
+            nav.dark-section .nav-links a {
+                font-size: 1rem;
+                color: var(--black);
+            }
+
+            .nav-name {
+                position: relative;
+                z-index: 102;
+            }
+
+            nav.menu-open .nav-name {
+                color: var(--black);
             }
 
             .hero, .ideas, .projects, .story, .research, .contact {
@@ -1161,11 +1164,6 @@
                 left: 1.5rem;
             }
 
-            .idea-card {
-                padding: 2rem;
-                min-height: auto;
-            }
-
             .story-photo {
                 max-width: 260px;
             }
@@ -1189,6 +1187,28 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .hero-massive .line span {
+                animation: none;
+                transform: none;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1202,6 +1222,10 @@
             <!-- <a href="#research">Research</a> -->
             <a href="#contact">Contact</a>
         </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
     <section class="hero">
@@ -1353,7 +1377,7 @@
                 The journey is <span class="italic">everything</span>
             </h2>
             <div class="story-photo reveal">
-                <img src="photo.JPG" alt="Janu Verma">
+                <img src="photo-small.jpg" alt="Janu Verma" width="800" height="600" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -1373,16 +1397,11 @@
             </p>
             <p class="story-text reveal">
                 I have always been drawn to hard problems in complex systems. Be it algebraic geometry, crop genetics, fraud networks, or how AI learns what a person actually wants. The domain changes, but the way of thinking does not.
-                <!-- Writing is how I understand the world. It's how I clarify my thinking, test my assumptions, and connect with others. It's also how I document the journey — the successes, failures, and lessons learned along the way. -->
             </p>
             <p class="story-text reveal">
                 I use writing as a tool for growth. By articulating my ideas, I hold myself accountable to continuous learning and improvement. It's a way to push the boundaries of my knowledge and share that growth with others. Writing helps me make sense of the complex world of AI and my place within it.
             </p>
-            <!-- <p class="story-text reveal">
-                Writing is not just a means of communication for me; it's a way of life. It's how I make sense of the complex world of AI and my place within it.
-            </p> -->
             <p class="story-text reveal">
-                <!-- I write because it forces clarity. If I can't explain something, I don't understand it yet. -->
                 When I'm not reading papers, I'm probably making pour-over videos, exploring a recipe, or thinking too much about what to wear.
             </p>
         </div>
@@ -1398,9 +1417,7 @@
                     <p>
                         I speak about AI that works in practice — the gap between research and production, building systems at scale, and what's actually changing in ML.
                     </p>
-                    <!-- <a href="mailto:j.verma5@gmail.com?subject=Speaking Inquiry" class="speaking-cta-btn"> -->
-                    <a href="#" onclick="window.location.href='mailto:' + 'j.verma5' + '@' + 'gmail.com' + '?subject=Speaking Inquiry'; return false;" class="speaking-cta-btn">
-
+                    <a href="mailto:j.verma5@gmail.com?subject=Speaking%20Inquiry" class="speaking-cta-btn">
                         Invite me to speak
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -1536,9 +1553,6 @@
             <p class="contact-text">
                 Always interested in conversations about AI research, interesting problems, or potential collaborations.
             </p>
-            <!-- <p>Get in touch</p> -->
-            <!-- <a href="#" onclick="window.location.href='mailto:' + 'j.verma5' + '@' + 'gmail.com'; return false;">Get in touch</a> -->
-            
             <div class="social-row">
                 <a href="https://github.com/januverma" target="_blank" class="social-btn" aria-label="GitHub">
                     <svg viewBox="0 0 24 24" fill="currentColor">
@@ -1565,7 +1579,7 @@
     </section>
 
     <footer>
-        <span>© 2025 Janu Verma</span>
+        <span>© 2026 Janu Verma</span>
         <span>London</span>
     </footer>
 
@@ -1614,8 +1628,23 @@
             }
         }
 
-        window.addEventListener('scroll', updateNav);
+        window.addEventListener('scroll', updateNav, { passive: true });
         updateNav();
+
+        // Mobile menu
+        const navToggle = document.getElementById('navToggle');
+
+        navToggle.addEventListener('click', () => {
+            const open = navbar.classList.toggle('menu-open');
+            navToggle.setAttribute('aria-expanded', open);
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navbar.classList.remove('menu-open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
     </script>
 </body>
 </html>

@@ -6,6 +6,13 @@
     <title>Instagram Strategist — Janu Verma</title>
     <meta name="description" content="A two-stage multimodal pipeline using Gemma 4 to analyze Instagram reels and surface real content strategy.">
 
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://januverma.com/projects/instagram-strategist.html">
+    <meta property="og:title" content="Instagram Strategist — Janu Verma">
+    <meta property="og:description" content="A two-stage multimodal pipeline using Gemma 4 to analyze Instagram reels and surface real content strategy.">
+    <meta name="twitter:card" content="summary">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -21,6 +28,10 @@
             <a href="../index.html#speaking">Speaking</a>
             <a href="../index.html#contact">Contact</a>
         </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
     <section class="project-hero">
@@ -212,7 +223,7 @@
     </section>
 
     <footer>
-        <span>© 2025 Janu Verma</span>
+        <span>© 2026 Janu Verma</span>
         <span>London</span>
     </footer>
 
@@ -229,6 +240,12 @@
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) navbar.classList.add('scrolled');
             else navbar.classList.remove('scrolled');
+        }, { passive: true });
+
+        const navToggle = document.getElementById('navToggle');
+        navToggle.addEventListener('click', () => {
+            const open = navbar.classList.toggle('menu-open');
+            navToggle.setAttribute('aria-expanded', open);
         });
     </script>
 </body>
