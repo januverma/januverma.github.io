@@ -451,6 +451,7 @@
             color: var(--gray);
         }
 
+        /* Project grid (generic) */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1303,10 +1304,17 @@
                     Things I'm<br><span class="italic">building</span>
                 </h2>
                 <p class="projects-intro">
-                    Side projects at the edges of what language models can do — applied to my own books, my own videos, my own questions. Built to learn, shared to invite conversation.
+                    Experiments I'm building — each its own thing. Some belong to a larger track of work; open a project to see where it fits.
                 </p>
             </div>
 
+            <!--
+                PROJECT CARD TEMPLATE
+                Each project = { number, title, tagline, desc, tags[], status, track? }.
+                Card links to its detail page in projects/. The track (if any) is shown
+                on the detail page as a clickable tag — never branded here on the grid.
+                To add a project: copy a card below and create projects/<slug>.html.
+            -->
             <div class="projects-grid">
                 <a href="projects/marginalia.html" class="project-card reveal">
                     <div class="project-meta">
@@ -1352,20 +1360,27 @@
                     </span>
                 </a>
 
-                <div class="project-card placeholder reveal">
+                <a href="projects/stellar-evolution.html" class="project-card reveal">
                     <div class="project-meta">
                         <span class="project-number">03 / Project</span>
-                        <span class="project-status">Soon</span>
+                        <span class="project-status">Live</span>
                     </div>
-                    <h3 class="project-title">In the workshop</h3>
-                    <p class="project-tagline">Something is being built.</p>
+                    <h3 class="project-title">Stellar Evolution</h3>
+                    <p class="project-tagline">Every black hole begins as a breath of dust.</p>
                     <p class="project-desc">
-                        The next project is taking shape — exploring how language models can reason over longer stretches of personal context. Details coming.
+                        An interactive, scroll-driven story of a star's whole life — gravitational collapse, the ten-million-year fusion truce, an iron core that can't burn, the supernova, and the three endings decided by mass alone.
                     </p>
                     <div class="project-tags">
-                        <span>TBD</span>
+                        <span>Canvas</span>
+                        <span>JavaScript</span>
+                        <span>Interactive</span>
                     </div>
-                </div>
+                    <span class="project-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
             </div>
         </div>
     </section>

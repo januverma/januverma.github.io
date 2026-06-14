@@ -165,6 +165,25 @@ nav.menu-open .nav-toggle span:last-child {
     border-radius: 50%;
 }
 
+/* Track membership — a clickable tag linking to the umbrella program */
+.project-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--orange);
+    border-radius: 999px;
+    transition: all 0.3s ease;
+}
+
+.project-track:hover {
+    background: var(--orange);
+    color: var(--white);
+}
+
 .project-name {
     font-family: 'Playfair Display', serif;
     font-size: clamp(3rem, 9vw, 7rem);

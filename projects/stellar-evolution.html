@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Stars Die — a visual story, from dust to black holes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05060c;
+  --ink:#eae8f2;
+  --muted:#9aa0b8;
+  --faint:#5d6378;
+  --amber:#ffb35c;
+  --ember:#ff6a52;
+  --ice:#8fc2ff;
+  --violet:#8b7bd8;
+  --line:rgba(234,232,242,.10);
+  --display:'Unbounded',sans-serif;
+  --body:'Instrument Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+html,body{overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.02rem;line-height:1.7}
+::selection{background:rgba(255,179,92,.30)}
+
+/* ---------- top progress ---------- */
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--violet),var(--amber),var(--ember));z-index:50}
+
+/* ---------- hero ---------- */
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;text-align:center;
+  position:relative;padding:0 1.4rem;
+  background:
+    radial-gradient(1px 1px at 12% 22%,rgba(255,255,255,.7),transparent 60%),
+    radial-gradient(1px 1px at 78% 14%,rgba(255,255,255,.55),transparent 60%),
+    radial-gradient(1.5px 1.5px at 30% 74%,rgba(180,205,255,.7),transparent 60%),
+    radial-gradient(1px 1px at 64% 58%,rgba(255,255,255,.4),transparent 60%),
+    radial-gradient(1px 1px at 88% 80%,rgba(255,210,170,.6),transparent 60%),
+    radial-gradient(1.5px 1.5px at 45% 36%,rgba(255,255,255,.5),transparent 60%),
+    radial-gradient(900px 500px at 50% 120%,rgba(139,123,216,.14),transparent 70%),
+    var(--bg);
+}
+.hero .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--amber);margin-bottom:1.6rem}
+.hero h1{font-family:var(--display);font-weight:300;font-size:clamp(2.1rem,5.6vw,4rem);line-height:1.14}
+.hero h1 b{font-weight:500;color:var(--amber)}
+.hero p{color:var(--muted);max-width:34rem;margin:1.6rem auto 0}
+.hero .byline{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--faint);margin:2rem auto 0}
+.hero .byline b{color:var(--muted);font-weight:500}
+.scrollcue{position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--faint)}
+.scrollcue::after{content:"";display:block;width:1px;height:42px;margin:.7rem auto 0;background:linear-gradient(var(--faint),transparent);animation:drip 2.2s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(.2);transform-origin:top}55%{transform:scaleY(1)}100%{opacity:0;transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.scrollcue::after{animation:none}}
+
+/* ---------- split story layout ---------- */
+.story{display:grid;grid-template-columns:minmax(330px,31rem) 1fr;align-items:start}
+.stage{
+  grid-column:2;grid-row:1;position:sticky;top:0;height:100vh;height:100svh;
+  overflow:hidden;border-left:1px solid var(--line);background:var(--bg);
+}
+.textcol{grid-column:1;grid-row:1;padding:0 2.6rem 0 clamp(1.4rem,4vw,4rem)}
+#sky{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* stage caption */
+.scap{
+  position:absolute;top:1.2rem;left:1.4rem;right:1.4rem;z-index:6;
+  font-family:var(--mono);font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);
+  display:flex;gap:.8rem;align-items:center;pointer-events:none;
+}
+.scap b{color:var(--amber);font-weight:500}
+.scap::after{content:"";height:1px;flex:1;background:var(--line)}
+
+/* ---------- overlays on stage ---------- */
+.ov{
+  position:absolute;left:0;right:0;bottom:0;z-index:5;
+  padding:1.1rem 1.4rem 1.2rem;
+  background:linear-gradient(transparent, rgba(5,6,12,.88) 36%);
+  opacity:0;pointer-events:none;transform:translateY(8px);
+  transition:opacity .45s, transform .45s;
+}
+.ov.show{opacity:1;pointer-events:auto;transform:none}
+.ov .wlbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);margin-bottom:.7rem}
+.ov input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer}
+.ov input[type=range]:focus-visible{outline:1px solid var(--amber);outline-offset:4px;border-radius:8px}
+.ov input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--amber),var(--ember))}
+.ov input[type=range]::-moz-range-track{height:3px;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--amber),var(--ember))}
+.ov input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;margin-top:-7.5px;background:var(--ink);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--muted),0 0 14px rgba(255,179,92,.5)}
+.ov input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--muted),0 0 14px rgba(255,179,92,.5)}
+.marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;color:var(--faint);margin-top:.25rem;text-transform:uppercase}
+.cells{display:flex;gap:.7rem;margin-top:.8rem;flex-wrap:wrap}
+.cell{flex:1;min-width:120px;border:1px solid var(--line);border-radius:10px;padding:.55rem .8rem;background:rgba(5,6,12,.5)}
+.cell .k{font-family:var(--mono);font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.cell .v{font-family:var(--mono);font-size:.98rem;color:var(--ink);margin-top:.2rem;white-space:nowrap}
+.cell .v small{font-size:.66rem;color:var(--muted)}
+.stat{margin-top:.7rem;font-size:.85rem;line-height:1.5;color:var(--muted);min-height:2.6em}
+.stat strong{color:var(--amber)}
+.ov .btn{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:9px;
+  padding:.55rem 1rem;cursor:pointer;transition:.2s;
+}
+.ov .btn:hover{border-color:var(--amber);color:var(--amber)}
+.ov .btn:focus-visible{outline:1px solid var(--amber);outline-offset:2px}
+.ov .btn.active{border-color:var(--amber);color:var(--amber);background:rgba(255,179,92,.08)}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap}
+
+/* thermometer (ignition) */
+#ov-proto{display:flex;align-items:flex-end;gap:1.1rem}
+.thermo{width:14px;height:130px;border:1px solid var(--line);border-radius:8px;position:relative;overflow:hidden;background:rgba(255,255,255,.04);flex:none}
+.thermo .tfill{position:absolute;left:0;right:0;bottom:0;height:5%;background:linear-gradient(0deg,#5a6fd1,#ffb35c,#fff3d6);transition:height .15s linear}
+.tread{flex:1}
+.tread .big{font-family:var(--mono);font-size:1.3rem;color:var(--ink)}
+.tread .big.lit{color:var(--amber);text-shadow:0 0 18px rgba(255,179,92,.8)}
+.tread .sub{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:.2rem}
+
+/* burn clock (swelling) */
+.fuels{display:flex;flex-direction:column;gap:.3rem}
+.fuel{display:flex;justify-content:space-between;gap:1rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--faint);padding:.3rem .6rem;border-left:2px solid transparent;transition:.3s}
+.fuel.on{color:var(--ink);border-left-color:var(--amber);background:rgba(255,179,92,.06)}
+.fuel.done{color:var(--muted);border-left-color:var(--faint)}
+.fuel .dur{color:inherit;opacity:.75}
+
+/* binding curve + core meter (iron) */
+#bindsvg{width:100%;height:auto;display:block}
+.meter{height:10px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:.5rem;position:relative}
+.meter .mfill{position:absolute;inset:0 auto 0 0;width:0%;background:linear-gradient(90deg,var(--ice),var(--amber),var(--ember));transition:width .12s linear}
+.meter.crit .mfill{background:var(--ember);box-shadow:0 0 16px rgba(255,106,82,.8)}
+
+/* remnant scale cards */
+.remrow{display:flex;gap:.7rem}
+.rem{flex:1;border:1px solid var(--line);border-radius:12px;padding:.8rem;text-align:center;background:rgba(5,6,12,.55)}
+.rem .ic{height:54px;display:flex;align-items:center;justify-content:center;margin-bottom:.4rem}
+.rem .nm{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.rem .sz{font-family:var(--mono);font-size:.56rem;color:var(--faint);margin-top:.2rem}
+.rem{transition:border-color .35s,box-shadow .35s,opacity .35s;opacity:.55}
+.rem.hl{opacity:1;border-color:rgba(143,194,255,.6);box-shadow:0 0 20px rgba(143,194,255,.12) inset}
+.dot-wd{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#bcd0f0 60%,#7e94c4)}
+.dot-ns{width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 14px #8fc2ff,0 0 30px rgba(143,194,255,.6)}
+.dot-bh{width:22px;height:22px;border-radius:50%;background:#000;box-shadow:0 0 0 2px rgba(255,200,140,.95),0 0 18px rgba(255,160,100,.7)}
+
+/* clocks (time dilation) */
+.clkrow{display:flex;gap:.8rem;margin-top:.6rem}
+.clk{flex:1;border:1px solid var(--line);border-radius:12px;padding:.7rem;text-align:center;background:rgba(5,6,12,.5)}
+.clk .face{width:52px;height:52px;border-radius:50%;margin:0 auto .5rem;position:relative;border:1px solid var(--muted)}
+.clk .hand{position:absolute;left:50%;top:50%;width:2px;height:21px;background:var(--amber);transform-origin:bottom center;transform:translate(-50%,-100%)}
+.clk .face.far .hand{background:var(--ice)}
+.clk .k{font-family:var(--mono);font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.clk .v{font-family:var(--mono);font-size:.78rem;color:var(--ink);margin-top:.2rem}
+
+/* fate finale */
+#ov-fate{background:linear-gradient(transparent, rgba(5,6,12,.94) 26%)}
+.fstage{display:flex;align-items:center;gap:1.2rem;margin:.4rem 0 .6rem;min-height:78px}
+.orb{width:54px;height:54px;border-radius:50%;flex:none;transition:all .45s cubic-bezier(.2,.7,.3,1)}
+.fmeta .fname{font-family:var(--display);font-weight:400;font-size:1.02rem}
+.fmeta .fsub{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:.25rem}
+.fstory{font-size:.86rem;color:var(--muted);line-height:1.55;min-height:5.2em;margin-top:.5rem}
+
+/* ---------- text column ---------- */
+.textcol .spacer{height:34vh}
+section.ch{padding:6vh 0 10vh}
+.eyebrow{font-family:var(--mono);font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+.eyebrow::after{content:"";height:1px;flex:1;background:var(--line)}
+.acc-violet .eyebrow{color:var(--violet)}
+.acc-ember .eyebrow{color:var(--ember)}
+.acc-ice .eyebrow{color:var(--ice)}
+.ch h2{font-family:var(--display);font-weight:400;font-size:clamp(1.3rem,2.1vw,1.7rem);line-height:1.32;margin-bottom:1.1rem}
+.ch p{color:var(--muted);margin-bottom:1rem}
+.ch p strong{color:var(--ink);font-weight:600}
+.ch p em{color:var(--ink)}
+.note{font-size:.9rem;color:var(--faint);border-left:2px solid var(--line);padding-left:1rem;margin-top:1.3rem}
+
+/* steps — sub-beats that drive the stage */
+.step{border-left:2px solid var(--line);padding:.15rem 0 .15rem 1.1rem;margin:0 0 54vh;transition:border-color .35s}
+.step:last-of-type{margin-bottom:30vh}
+.ch>p,.ch .eyebrow,.ch h2{max-width:100%}
+.ch>h2{margin-bottom:14vh}
+.ch>p+.step{margin-top:0}
+.ch>p{margin-bottom:14vh}
+.step.on{border-left-color:var(--amber)}
+.acc-ice .step.on{border-left-color:var(--ice)}
+.step h3{font-family:var(--display);font-weight:400;font-size:1rem;margin-bottom:.5rem;color:var(--ink)}
+.step p{margin-bottom:.5rem}
+.hint{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);opacity:.85}
+.acc-ice .hint{color:var(--ice)}
+
+/* equations */
+.eq{font-family:var(--mono);font-size:.95rem;color:var(--ink);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;margin:1.3rem 0;text-align:center;overflow-x:auto;white-space:nowrap}
+.eq .lbl{display:block;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:.55rem;white-space:normal}
+sub,sup{font-size:.68em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em}
+.frac>span{display:block;padding:0 .3em;line-height:1.25}
+.frac>span:first-child{border-bottom:1px solid var(--muted)}
+
+/* go deeper */
+details.deeper{margin-top:1.3rem;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+details.deeper summary{cursor:pointer;list-style:none;padding:.8rem 1.1rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.7rem;user-select:none}
+details.deeper summary::before{content:"+";color:var(--amber);font-size:.9rem}
+details.deeper[open] summary::before{content:"−"}
+details.deeper summary:hover{color:var(--ink)}
+details.deeper summary:focus-visible{outline:1px solid var(--amber);outline-offset:-1px}
+details.deeper .inner{padding:.2rem 1.1rem 1.1rem;font-size:.92rem;color:var(--muted)}
+details.deeper .inner p{margin-bottom:.8rem}
+
+#yourstar{padding-bottom:55vh}
+/* outro */
+.outro{padding:30vh 0 16vh;text-align:left}
+.outro .end{font-family:var(--display);font-weight:300;font-size:1.4rem;color:var(--ink);margin-bottom:1.2rem}
+.outro p{color:var(--muted);margin-bottom:1rem}
+footer{padding:0 0 3rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- mobile: stage pinned on top ---------- */
+@media(max-width:920px){
+  .story{display:block}
+  .stage{position:sticky;top:0;height:47svh;border-left:0;border-bottom:1px solid var(--line);z-index:10}
+  .textcol{padding:0 1.3rem}
+  section.ch{padding:4vh 0 6vh}
+  .step{margin:0 0 46vh}
+  .step:last-of-type{margin-bottom:24vh}
+  .ch>h2{margin-bottom:10vh}
+  .ch>p{margin-bottom:10vh}
+  .ov{padding:.7rem .9rem .8rem}
+  .cells{gap:.5rem}.cell{min-width:100px;padding:.4rem .6rem}
+  .cell .v{font-size:.82rem}
+  .stat{font-size:.76rem;min-height:0}
+  .remrow{gap:.4rem}.rem{padding:.5rem}
+  .scap{font-size:.56rem}
+  .thermo{height:84px}
+  .fstory{min-height:0}
+}
+/* back to site + track */
+.site-back{position:fixed;top:1.1rem;left:1.3rem;z-index:50;font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:.55rem;padding:.5rem .85rem;background:rgba(5,6,12,.55);border:1px solid var(--line);border-radius:999px;backdrop-filter:blur(8px);transition:color .3s ease,border-color .3s ease}
+.site-back:hover{color:var(--amber);border-color:var(--amber)}
+.site-track{position:fixed;top:1.1rem;right:1.3rem;z-index:50;font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);text-decoration:none;padding:.5rem .85rem;background:rgba(5,6,12,.55);border:1px solid var(--amber);border-radius:999px;backdrop-filter:blur(8px);transition:background .3s ease,color .3s ease}
+.site-track:hover{background:var(--amber);color:var(--bg)}
+@media(max-width:560px){.site-track{display:none}}
+</style>
+</head>
+<body>
+<a href="../index.html#projects" class="site-back">← Janu Verma</a>
+<a href="../explorable-explanations.html" class="site-track">Explorable Explanations</a>
+<div id="prog" aria-hidden="true"></div>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="kicker">A visual story · ten million years</div>
+  <h1>Every black hole<br>begins as <b>a breath of dust</b></h1>
+  <p>The life of one massive star — from a cold cloud of hydrogen to the strangest object physics has ever predicted. Scroll, and time will pass. Touch what you see.</p>
+  <p class="byline">Made by <b>Janu Verma</b> &amp; <b>Tammana Kapoor</b>, with <b>Claude Fable 5</b></p>
+  <div class="scrollcue">Scroll</div>
+</header>
+
+<div class="story">
+
+  <!-- ================= STICKY VISUAL STAGE ================= -->
+  <div class="stage" id="stage" role="img" aria-label="Animated visualization of the current chapter">
+    <canvas id="sky"></canvas>
+    <div class="scap"><b id="scapStage">01</b><span id="scapText">A cold dark cloud</span></div>
+
+    <!-- ignition thermometer -->
+    <div class="ov" id="ov-proto">
+      <div class="thermo"><div class="tfill" id="tfill"></div></div>
+      <div class="tread">
+        <div class="big" id="tval">12,000 K</div>
+        <div class="sub" id="tsub">Core temperature · rising as the cloud falls</div>
+      </div>
+    </div>
+
+    <!-- balance: perturb the core -->
+    <div class="ov" id="ov-balance">
+      <div class="wlbl">Try it · Squeeze the core, then let go</div>
+      <input type="range" id="perturb" min="0" max="1000" value="500" aria-label="Perturb the star's core">
+      <div class="marks"><span>← compress</span><span>equilibrium</span><span>inflate →</span></div>
+      <div class="stat" id="balStat">Drag away from the middle and release. The star's thermostat will fight you — and win.</div>
+    </div>
+
+    <!-- burn clock -->
+    <div class="ov" id="ov-swelling">
+      <div class="wlbl">The burn clock · each fuel dies faster</div>
+      <div class="fuels" id="fuels">
+        <div class="fuel"><span>HYDROGEN → HELIUM</span><span class="dur">7,000,000 years</span></div>
+        <div class="fuel"><span>HELIUM → CARBON</span><span class="dur">700,000 years</span></div>
+        <div class="fuel"><span>CARBON → NEON</span><span class="dur">600 years</span></div>
+        <div class="fuel"><span>NEON / OXYGEN → SILICON</span><span class="dur">6 months</span></div>
+        <div class="fuel"><span>SILICON → IRON</span><span class="dur">1 day</span></div>
+      </div>
+    </div>
+
+    <!-- iron: binding energy + core meter -->
+    <div class="ov" id="ov-iron">
+      <div class="wlbl">The valley of binding energy · fusion pays until iron</div>
+      <svg id="bindsvg" viewBox="0 0 520 130" aria-label="Nuclear binding energy curve, lowest at iron">
+        <path d="M20,18 C90,86 150,104 240,114 C320,122 360,118 380,114 C430,104 480,84 505,66"
+              fill="none" stroke="rgba(143,194,255,.55)" stroke-width="2"/>
+        <line x1="380" y1="114" x2="380" y2="128" stroke="rgba(255,106,82,.8)" stroke-width="1"/>
+        <text x="380" y="110" fill="#ff6a52" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">Fe</text>
+        <text x="20"  y="14"  fill="#5d6378" font-family="IBM Plex Mono" font-size="9">H</text>
+        <text x="498" y="60"  fill="#5d6378" font-family="IBM Plex Mono" font-size="9">U</text>
+        <text x="100" y="50" fill="#5d6378" font-family="IBM Plex Mono" font-size="9">fusion releases energy ↓</text>
+        <text x="395" y="90" fill="#5d6378" font-family="IBM Plex Mono" font-size="9">↓ fusion costs energy</text>
+        <circle id="bindDot" cx="20" cy="18" r="5" fill="#ffb35c"/>
+        <text id="bindLab" x="30" y="30" fill="#ffb35c" font-family="IBM Plex Mono" font-size="11">H</text>
+      </svg>
+      <div class="meter" id="coreMeter"><div class="mfill" id="coreFill"></div></div>
+      <div class="stat" id="ironStat">Iron core: 0.3 M☉ · Chandrasekhar limit: 1.4 M☉</div>
+    </div>
+
+    <!-- nova replay -->
+    <div class="ov" id="ov-nova">
+      <div class="btnrow">
+        <button class="btn" id="replayNova">↻ Replay the collapse</button>
+      </div>
+      <div class="stat">One second, start to finish: core falls at ¼ light-speed, neutrinos (blue) escape first, then the blast.</div>
+    </div>
+
+    <!-- remnant scale -->
+    <div class="ov" id="ov-remnants">
+      <div class="wlbl">What gravity leaves behind · to scale-ish</div>
+      <div class="remrow">
+        <div class="rem"><div class="ic"><div class="dot-wd"></div></div><div class="nm">White dwarf</div><div class="sz">Earth-sized · 1 t/cm³</div></div>
+        <div class="rem"><div class="ic"><div class="dot-ns"></div></div><div class="nm">Neutron star</div><div class="sz">City-sized · 10⁹ t/tsp</div></div>
+        <div class="rem"><div class="ic"><div class="dot-bh"></div></div><div class="nm">Black hole</div><div class="sz">No surface at all</div></div>
+      </div>
+    </div>
+
+    <!-- squeeze the sun -->
+    <div class="ov" id="ov-horizon">
+      <div class="wlbl">Try it · Squeeze the Sun</div>
+      <input type="range" id="squeeze" min="0" max="1000" value="0" aria-label="Compress the Sun to smaller radii">
+      <div class="marks"><span>696,000 km</span><span>← compress →</span><span>3 km</span></div>
+      <div class="cells">
+        <div class="cell"><div class="k">Radius</div><div class="v" id="rOut">696,000 km</div></div>
+        <div class="cell"><div class="k">Escape velocity</div><div class="v" id="vOut">618 km/s <small>0.2% c</small></div></div>
+      </div>
+      <div class="stat" id="sqStat">Same mass, smaller ball. Watch the light rays as escape velocity climbs.</div>
+    </div>
+
+    <!-- time dilation -->
+    <div class="ov" id="ov-clocks">
+      <div class="wlbl">Try it · Hover near the horizon</div>
+      <input type="range" id="dil" min="0" max="1000" value="1000" aria-label="Distance from the event horizon">
+      <div class="marks"><span>Just above horizon</span><span>← distance →</span><span>Far away</span></div>
+      <div class="clkrow">
+        <div class="clk"><div class="face"><div class="hand" id="nearHand"></div></div><div class="k">You, hovering</div><div class="v" id="nearV">100% rate</div></div>
+        <div class="clk"><div class="face far"><div class="hand" id="farHand"></div></div><div class="k">Far away</div><div class="v" id="farV">100% rate</div></div>
+      </div>
+      <div class="stat" id="dilStat"></div>
+    </div>
+
+    <!-- tides -->
+    <div class="ov" id="ov-tides">
+      <div class="wlbl">Try it · Approach feet-first</div>
+      <input type="range" id="tide" min="0" max="1000" value="900" aria-label="Distance of astronaut from black hole">
+      <div class="marks"><span>At the horizon</span><span>← approach →</span><span>Safe distance</span></div>
+      <div class="btnrow" style="margin-top:.7rem">
+        <button class="btn active" id="bhSmall">Stellar black hole</button>
+        <button class="btn" id="bhBig">Supermassive</button>
+      </div>
+      <div class="stat" id="tideStat"></div>
+    </div>
+
+    <!-- orbit swap -->
+    <div class="ov" id="ov-orbit">
+      <div class="btnrow">
+        <button class="btn" id="swapBtn">⇄ Replace the Sun with a black hole</button>
+      </div>
+      <div class="stat" id="orbStat">Earth orbits the Sun. Press the button — and watch what changes about the orbit. (Spoiler: nothing.)</div>
+    </div>
+
+    <!-- hawking -->
+    <div class="ov" id="ov-thermo">
+      <div class="wlbl">Try it · Temperature of a black hole</div>
+      <input type="range" id="hawk" min="0" max="1000" value="640" aria-label="Black hole mass">
+      <div class="marks"><span>Mountain mass</span><span>Moon</span><span>Sun</span><span>Sgr A*</span></div>
+      <div class="cells">
+        <div class="cell"><div class="k">Mass</div><div class="v" id="hMass">1 M☉</div></div>
+        <div class="cell"><div class="k">Temperature</div><div class="v" id="hTemp">62 nK</div></div>
+        <div class="cell"><div class="k">Evaporates in</div><div class="v" id="hLife">10⁶⁷ yr</div></div>
+      </div>
+      <div class="stat" id="hStat"></div>
+    </div>
+
+    <!-- fate -->
+    <div class="ov" id="ov-fate">
+      <div class="wlbl">Try it · Birth mass of your star</div>
+      <input type="range" id="fate" min="0" max="1000" value="500" aria-label="Choose the birth mass of a star">
+      <div class="marks"><span>0.05 M☉</span><span>1 M☉ (Sun)</span><span>60 M☉</span></div>
+      <div class="fstage">
+        <div class="orb" id="fateOrb"></div>
+        <div class="fmeta">
+          <div class="fname" id="fateName">A sun-like star</div>
+          <div class="fsub" id="fateSub">Lives ~10 billion years → white dwarf</div>
+        </div>
+      </div>
+      <div class="fstory" id="fateStory"></div>
+    </div>
+  </div>
+
+  <!-- ================= TEXT COLUMN ================= -->
+  <article class="textcol">
+  <div class="spacer"></div>
+
+  <section class="ch acc-violet" id="cloud" data-scene="cloud" data-cap="01|A cold dark cloud">
+    <div class="eyebrow">T = 0 · A cold dark cloud</div>
+    <h2>It starts with almost nothing</h2>
+    <div class="step" data-vs="c1" data-cap="01|A cold dark cloud">
+      <p>Between the stars drift vast clouds of gas — mostly hydrogen, brutally cold, around <strong>10 degrees above absolute zero</strong>, far emptier than any vacuum we can make on Earth. Yet a single cloud holds the raw material for thousands of suns. On the stage: dust, adrift.</p>
+    </div>
+    <div class="step" data-vs="c2" data-cap="01|Be the nudge">
+      <p>Gravity is the weakest force in nature, but it has two unfair advantages: it never cancels out, and it never gets tired. Every atom pulls on every other, forever. All it takes is a nudge — the shockwave of a nearby exploding star — and one clump becomes slightly denser than its surroundings.</p>
+      <p class="hint">→ Move your cursor (or finger) over the cloud — be the nudge</p>
+    </div>
+    <div class="step" data-vs="c3" data-cap="01|Runaway collapse">
+      <p>Denser means stronger gravity. Stronger gravity gathers more gas. Watch the cloud now: the clump at the center is winning. It begins to <em>fall into itself</em>, and there is no one to stop it.</p>
+      <details class="deeper">
+        <summary>Go deeper — when does a cloud collapse?</summary>
+        <div class="inner"><p>A cloud collapses when self-gravity beats internal gas pressure — the tipping point is the <strong>Jeans mass</strong>. Cold, dense clumps collapse easiest, which is why stars are born in the darkest pockets of the galaxy. Keep that sentence: the entire life and death of a star is the same fight, replayed at higher stakes — <em>gravity pulling in versus pressure pushing out</em>.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="ch" id="ignition" data-scene="proto" data-cap="02|Protostar">
+    <div class="eyebrow">T + 100,000 years · Protostar</div>
+    <h2>Falling makes heat. Heat makes light.</h2>
+    <div class="step" data-vs="p1" data-cap="02|Falling makes heat">
+      <p>As the clump collapses, <strong>falling gas gets hot</strong> — gravitational energy becomes motion, motion becomes collisions, collisions become heat, the same reason a meteor glows. At the center forms a <em>protostar</em>, glowing purely from the violence of its own infall. The thermometer on the stage is climbing.</p>
+    </div>
+    <div class="step" data-vs="p2" data-cap="02|Ten million kelvin">
+      <p>Keep watching it. At roughly <strong>ten million kelvin</strong>, a threshold is crossed: hydrogen nuclei slam together hard enough to fuse into helium — and helium weighs <strong>0.7% less</strong> than the hydrogen that made it. The missing mass becomes energy:</p>
+      <div class="eq">E = mc²<span class="lbl">a tiny m, multiplied by an enormous c², twice</span></div>
+    </div>
+    <div class="step" data-vs="p3" data-cap="02|First light">
+      <p>The core ignites. A star is born — and for the first time, something pushes back against gravity.</p>
+    </div>
+  </section>
+
+  <section class="ch" id="balance" data-scene="star" data-cap="03|Main sequence">
+    <div class="eyebrow">T + 1 million years · Main sequence</div>
+    <h2>A ten-million-year truce</h2>
+    <div class="step" data-vs="b1" data-cap="03|Gravity vs pressure">
+      <p>A star is not a thing so much as a <strong>standoff</strong>. On the stage: gravity (blue arrows) squeezes inward; fusion heat (gold arrows) pushes outward. When they balance, the star holds steady — <em>hydrostatic equilibrium</em>.</p>
+    </div>
+    <div class="step" data-vs="b2" data-cap="03|Break the thermostat — try it">
+      <p>The truce is even self-correcting. Squeeze the core and it heats up, fusion races, and the gold arrows surge back. Inflate it and fusion stalls, and gravity reels it in. <strong>A star is a thermostat</strong> — try to break it and watch it recover. That stability is why the Sun has shone steadily for 4.6 billion years.</p>
+      <p class="hint">→ Drag the slider on the stage, then release</p>
+    </div>
+    <div class="step" data-vs="b3" data-cap="03|Heavier burns faster">
+      <p>But the truce has a strange clause: <strong>the bigger the star, the shorter its life</strong>. Our hero — born with 25 times the Sun's mass — must squeeze its core far harder, burns furiously bright, and gets only <em>seven million years</em> to the Sun's ten billion.</p>
+      <details class="deeper">
+        <summary>Go deeper — why do heavy stars die young?</summary>
+        <div class="inner"><p>Brightness grows steeply with mass — roughly as M³·⁵. Double the mass and the fuel bill multiplies by ~11, so lifetime scales as about M<sup>−2.5</sup>. A 25-solar-mass star lives thousands of times more briefly than the Sun.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="ch acc-ember" id="swelling" data-scene="giant" data-cap="04|Red supergiant">
+    <div class="eyebrow">T + 7 million years · Red supergiant</div>
+    <h2>The core runs dry, and the star fights on</h2>
+    <div class="step" data-vs="g1" data-cap="04|The swelling">
+      <p>Eventually the core exhausts its hydrogen. Pressure drops — and gravity, ever patient, squeezes. But squeezing heats the core until it can do something new: <strong>fuse helium into carbon</strong>. The furnace reignites on its own ashes, and the violence inflates the star — watch it swell — into a monster hundreds of times its old size, so spread-out that its surface cools and reddens. A <strong>red supergiant</strong>.</p>
+    </div>
+    <div class="step" data-vs="g2" data-cap="04|An onion of fires">
+      <p>The pattern repeats, each round more desperate. Ashes become fuel — helium to carbon, carbon to neon, neon and oxygen to silicon, silicon to iron — and the star becomes an <em>onion of nested fires</em>. The shells are forming on the stage now, one inside the other.</p>
+    </div>
+    <div class="step" data-vs="g3" data-cap="04|The clock accelerates">
+      <p>Look at the burn clock. Hydrogen lasted seven million years; the final stage — silicon to iron — lasts about <strong>one day</strong>. The star is now hours from catastrophe, and from the outside, nothing looks wrong at all.</p>
+    </div>
+  </section>
+
+  <section class="ch acc-ember" id="iron" data-scene="iron" data-cap="05|An iron heart">
+    <div class="eyebrow">The final day · An iron heart</div>
+    <h2>Iron: the ash that cannot burn</h2>
+    <div class="step" data-vs="i1" data-cap="05|The valley of binding energy">
+      <p>Why does the chain stop? Follow the dot on the curve below the star. Fusing light elements <em>releases</em> energy as nuclei slide down toward the bottom of the nuclear valley — and <strong>iron-56 sits at the very bottom</strong>, the most tightly bound nucleus in nature. Fusing iron into anything heavier would <em>cost</em> energy instead of paying it.</p>
+    </div>
+    <div class="step" data-vs="i2" data-cap="05|Quantum stiffness">
+      <p>The furnace doesn't run low on fuel; it reaches an ash that <em>cannot be fuel</em>. Inert iron piles up — the white heart now glowing at the center — held against gravity by one last defense: <strong>electron degeneracy pressure</strong>. The Pauli exclusion principle forbids electrons from being packed into the same state, so squeezed matter pushes back not with heat, but with quantum law itself.</p>
+      <p>It is a powerful pressure. It has a breaking point.</p>
+    </div>
+    <div class="step" data-vs="i3" data-cap="05|1.4 solar masses">
+      <div class="eq">M<sub>core</sub> &gt; 1.4 M<sub>☉</sub> → collapse<span class="lbl">The Chandrasekhar limit — watch the meter fill</span></div>
+      <p>In 1930, 19-year-old Subrahmanyan Chandrasekhar calculated that electron degeneracy supports at most <strong>1.4 solar masses</strong>. Silicon burning is feeding the iron core toward that number — an Earth-mass of iron every few minutes. The meter is filling. The star has begun to tremble.</p>
+    </div>
+  </section>
+
+  <section class="ch acc-ice" id="nova" data-scene="nova" data-cap="06|Core collapse">
+    <div class="eyebrow">The final second · Core collapse</div>
+    <h2>A quarter of the speed of light, inward</h2>
+    <div class="step" data-vs="n1" data-cap="06|The final second">
+      <p>The core crosses the limit, and the electrons lose. In <strong>less than one second</strong>, a core the size of Earth collapses to a ball ~20 km wide — on stage, the heart of the star is falling in at a quarter of light-speed. Electrons are crushed into protons, forging neutrons and releasing a flood of ghost-like <strong>neutrinos</strong> — the blue sparks escaping first.</p>
+    </div>
+    <div class="step" data-vs="n2" data-cap="06|Detonation">
+      <p>The collapse slams to a halt when neutrons lock at nuclear density; infalling matter rebounds off the suddenly rigid core, and the bounce — turbocharged by the neutrino flood — tears the star apart. For weeks, this single <strong>supernova</strong> outshines its galaxy of a hundred billion stars. In the inferno, the elements heavier than iron are forged at last: the gold and iodine in your body were made in moments like this.</p>
+      <p class="hint">→ Missed it? Hit replay on the stage</p>
+    </div>
+    <div class="step" data-vs="n3" data-cap="06|The neutrino flood">
+      <p class="note" style="margin-top:0">About 99% of the energy escapes as invisible neutrinos — the brightest light show in the universe is, energetically, a footnote. In 1987, detectors on Earth caught a supernova's neutrinos hours <em>before</em> its light arrived.</p>
+    </div>
+  </section>
+
+  <section class="ch acc-ice" id="remnants" data-scene="ns" data-cap="07|Aftermath">
+    <div class="eyebrow">Aftermath · What gravity leaves behind</div>
+    <h2>Three endings, decided by mass alone</h2>
+    <p>The explosion scatters most of the star into space. The fate of the surviving core depends on one question — <strong>how heavy is it, versus what can still push back?</strong></p>
+    <div class="step" data-vs="r1" data-cap="07|Ending 1 · White dwarf">
+      <p><strong>A white dwarf</strong> — for stars born under ~8 M☉, which never get this far: an Earth-sized ember held up by electron degeneracy, a ton per sugar-cube, slowly cooling forever. That pale orb on stage is our own Sun's fate.</p>
+    </div>
+    <div class="step" data-vs="r2" data-cap="07|Ending 2 · Neutron star">
+      <p><strong>A neutron star</strong> — if the core outweighs 1.4 suns: neutron degeneracy and nuclear forces hold a city-sized sphere, a billion tons per teaspoon. Some spin hundreds of times per second, sweeping lighthouse beams across the galaxy — <em>pulsars</em>, like the one flashing now.</p>
+    </div>
+    <div class="step" data-vs="r3" data-cap="07|Ending 3 · Nothing holds">
+      <p><strong>Or nothing holds.</strong> Above roughly <strong>3 solar masses</strong> of core, every known force surrenders. For our 25-solar-mass hero, the verdict is in: the light on stage is going out. The core keeps falling, past every size at which physics knows how to stop it.</p>
+    </div>
+  </section>
+
+  <section class="ch" id="horizon" data-scene="bh" data-cap="08|Black hole">
+    <div class="eyebrow">T + 7,000,001 years · Black hole</div>
+    <h2>What, exactly, is a black hole?</h2>
+    <div class="step" data-vs="h1" data-cap="08|Escape velocity">
+      <p>Start with an idea you know: <strong>escape velocity</strong>. Throw a ball at 11.2 km/s and it leaves Earth forever. It depends on mass and on how close you are. On stage: a lamp on the Sun's surface, shooting light in every direction. For now, every ray escapes easily.</p>
+      <div class="eq">v<sub>esc</sub> = √( 2GM / r )<span class="lbl">more mass, or smaller radius → harder to leave</span></div>
+    </div>
+    <div class="step" data-vs="h2" data-cap="08|Squeeze the Sun — try it">
+      <p>In 1783, John Michell asked: what if a body were so compact that escape velocity reached <em>the speed of light</em>? The squeeze has begun — same mass, smaller ball — and the rays are starting to curve. Take the slider yourself and push further.</p>
+      <p class="hint">→ Compress the Sun until light itself can no longer leave</p>
+    </div>
+    <div class="step" data-vs="h3" data-cap="08|The event horizon">
+      <p>Below about 3 km, the fan of rays snaps shut: light loses. That radius is the <strong>Schwarzschild radius</strong> — derived by Karl Schwarzschild in 1915, on the WWI front, weeks after Einstein published general relativity:</p>
+      <div class="eq">r<sub>s</sub> = 2GM / c²<span class="lbl">Sun → 3 km · Earth → 9 mm · you → smaller than an atom</span></div>
+      <p>That boundary is the <strong>event horizon</strong> — and here is the first peculiar thing: <em>it isn't a surface</em>. No wall, no membrane, no flash as you cross. It is a point of no return, like the line above a waterfall past which no swimmer can make it back. Inside, every direction points inward; "away from the center" stops existing.</p>
+    </div>
+    <div class="step" data-vs="h4" data-cap="08|The singularity">
+      <p>At the center, general relativity predicts a <strong>singularity</strong> — density without limit. Most physicists read the infinity not as a description of reality but as a confession: <em>here our theory breaks, and quantum gravity must take over.</em></p>
+    </div>
+  </section>
+
+  <section class="ch acc-ice" id="strange" data-scene="strange" data-cap="09|Peculiarities">
+    <div class="eyebrow">Peculiarities · Why physicists lose sleep</div>
+    <h2>Four strange truths, one stage</h2>
+
+    <div class="step" data-vs="lens" data-cap="09|Gravity bends light itself">
+      <h3>1 · They bend light into rings</h3>
+      <p>On stage: parallel light rays passing the black hole. Rays that pass far are nudged; closer ones whip around; at <strong>1.5 r<sub>s</sub></strong> (the dashed circle — the <em>photon sphere</em>) light can orbit in circles, and anything inside is captured.</p>
+      <p>This is why the famous 2019 image of the M87 black hole is a glowing ring around a shadow — and why you can see the <em>far side</em> of an accretion disk bent above and below the hole.</p>
+    </div>
+
+    <div class="step" data-vs="clocks" data-cap="09|Gravity slows time">
+      <h3>2 · They slow time</h3>
+      <p>Gravity isn't just a pull — it is a warping of time. Clocks deeper in gravity genuinely tick slower, by a factor of √(1 − r<sub>s</sub>/r). Near a horizon, the effect runs wild.</p>
+      <p class="hint">→ Drag the slider to hover closer</p>
+      <p>Watching a friend fall in, you'd see them slow, redden, and <em>freeze forever</em> at the horizon. From their side, nothing special happens — they cross in finite time and continue inward. Both stories are true.</p>
+    </div>
+
+    <div class="step" data-vs="tides" data-cap="09|Spaghettification">
+      <h3>3 · They spaghettify</h3>
+      <p>Near a small black hole, the pull on your feet vastly exceeds the pull on your head. The difference — a <em>tidal force</em> — stretches you into pasta. Walk the astronaut in and watch.</p>
+      <p class="hint">→ Slide to approach · switch black hole size</p>
+      <p>The counterintuitive part: <strong>bigger is gentler</strong>. Tides at the horizon scale as 1/M² — at a supermassive black hole you'd cross without feeling a thing.</p>
+    </div>
+
+    <div class="step" data-vs="orbit" data-cap="09|Not a vacuum cleaner">
+      <h3>4 · They are not vacuum cleaners</h3>
+      <p>Gravity at a distance cares only about mass, not what form it takes. Replace the Sun with a solar-mass black hole and Earth's orbit doesn't change by a millimetre.</p>
+      <p class="hint">→ Press the button. Watch the orbit.</p>
+      <p>Black holes don't roam and suck — things must fall <em>at</em> them, which is hard. Stars orbit our galaxy's central black hole calmly; we've filmed them for decades.</p>
+    </div>
+
+    <div class="step" data-vs="orbit" data-cap="09|Three numbers only">
+      <p>One more for the road: feed a black hole a piano or a library, and the result is described <em>completely</em> by three numbers — mass, spin, charge. Everything else is seemingly erased. Physicists call it the <strong>no-hair theorem</strong>, and it sets up the deepest puzzle of all, next.</p>
+    </div>
+  </section>
+
+  <section class="ch acc-violet" id="thermo" data-scene="thermo" data-cap="10|Black hole thermodynamics">
+    <div class="eyebrow">1971–1974 · Black hole thermodynamics</div>
+    <h2>The black hole that glows</h2>
+    <p>For decades black holes seemed like cosmic trash compactors: things go in, nothing comes out. Three results turned them into the meeting point of gravity, quantum theory, and thermodynamics.</p>
+
+    <div class="step" data-vs="t1" data-cap="10|Horizons only grow">
+      <p><strong>First: horizons only grow.</strong> Hawking proved (1971) that in any classical process, total horizon area never decreases — watch the merger on stage: the final horizon's area always exceeds the sum of the two originals. To physicists this rang a bell: it is exactly the shape of the <em>second law of thermodynamics</em>. Entropy never decreases.</p>
+    </div>
+
+    <div class="step" data-vs="t2" data-cap="10|Entropy lives on the surface">
+      <p><strong>Second: that's no coincidence.</strong> Jacob Bekenstein claimed horizon area <em>is</em> entropy. Hawking set out to prove him wrong with a quantum calculation — and proved him right. The result is engraved on Hawking's tombstone:</p>
+      <div class="eq">S = <span class="frac"><span>k c³ A</span><span>4 G ħ</span></span><span class="lbl">entropy ∝ surface area — gravity, quantum theory &amp; thermodynamics in one line</span></div>
+      <p>Read what it says: a black hole's information content scales with its <strong>area, not its volume</strong> — the shimmering bits on the stage live on the horizon itself. A solar-mass hole holds ~10⁷⁷ of them, more entropy than the star that made it. The hint that 3D information lives on a 2D boundary grew into the <em>holographic principle</em>.</p>
+    </div>
+
+    <div class="step" data-vs="t3" data-cap="10|Hawking radiation — try it">
+      <p><strong>Third: they evaporate.</strong> Entropy implies temperature; temperature implies glow. Hawking's mechanism, roughly: the vacuum seethes with fleeting particle pairs. At the horizon a pair can be split — one falls in, one escapes (watch the sparks). The hole pays from its own mass and slowly shrinks.</p>
+      <div class="eq">T = <span class="frac"><span>ħ c³</span><span>8π G M k</span></span><span class="lbl">Hawking temperature — M is on the bottom</span></div>
+      <p>M is in the denominator: <strong>bigger black holes are colder</strong> — backwards from any normal object. As one radiates it loses mass, gets <em>hotter</em>, radiates faster: a runaway ending in a final flash. Explore the absurd range — note where 2.7 K falls, the temperature of the Big Bang's afterglow.</p>
+      <p class="hint">→ Slide from mountain-mass to supermassive</p>
+      <details class="deeper">
+        <summary>Go deeper — the information paradox</summary>
+        <div class="inner"><p>The no-hair theorem comes back to bite. Quantum mechanics insists information is never destroyed — but Hawking radiation looks featureless. If a hole swallows an encyclopedia and evaporates, where did the information go? This is the <strong>information paradox</strong>, the sharpest known conflict between our two best theories. Recent work suggests the information leaks out, subtly encoded in the radiation — exactly how remains open.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="ch" id="yourstar" data-scene="fate" data-cap="11|Mass is destiny">
+    <div class="eyebrow">Epilogue · Mass is destiny</div>
+    <h2>Choose a star. Read its future.</h2>
+    <p>Everything in this story was decided by a single number fixed at birth: <strong>mass</strong>. Set the dial on the stage, and the laws of physics will do the rest — failed star, near-immortal ember, gentle fade, neutron beacon, or a perfect silent sphere of no return.</p>
+    <p class="hint">→ Drag the mass slider</p>
+  </section>
+
+  <section class="outro" data-scene="outro" data-cap="∞|Gravity is patient">
+    <div>
+      <p class="end">Gravity is patient.</p>
+      <p>A cloud of cold hydrogen fought it for ten million years with quantum mechanics and nuclear fire — and in losing, forged every heavy atom in your body, lit a galaxy for a few weeks, and left behind an object that forced gravity, quantum theory, and thermodynamics into a single equation.</p>
+      <p>Not a bad ending, for a breath of dust.</p>
+      <footer>How stars die · a visual story · scroll back up to be reborn ↑</footer>
+    </div>
+  </section>
+  </article>
+</div>
+<script>
+/* ============================================================
+   STAGE ENGINE — one sticky canvas, eleven scenes
+   ============================================================ */
+const stage = document.getElementById('stage');
+const cv = document.getElementById('sky');
+const cx = cv.getContext('2d');
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const lerp=(a,b,t)=>a+(b-a)*t, clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), smooth=t=>t*t*(3-2*t);
+let W=0,H=0,DPR=1,CX=0,CY=0,RU=0;       // RU = reference unit (min dimension)
+
+/* ---------- shared interactive state ---------- */
+const ST = {
+  scene:'cloud', sceneB:'cloud', blend:0, q:0, qB:0, vs:'',
+  ck:0, heat:0, swell:0, shellF:0, dotF:0, coreGlow:0, coreF:0,
+  novaP:0, remF:0, sqAuto:0, sqTouched:false, updSq:null, sp:0,
+  pointer:null,
+  perturb:0, perturbV:0, dragging:false,
+  squeezeT:0, squeezeFrac:0.00206, squeezeR:1,   // physics outputs
+  novaT:-1,
+  dilT:1,
+  tideT:.9, tideBig:false,
+  orbitBH:false, orbitAng:0, orbitTrail:[],
+  hawkT:.64, hawkTemp:62e-9,
+  fateT:.5
+};
+
+/* ---------- starfield ---------- */
+let field;
+function buildField(){
+  field=document.createElement('canvas'); field.width=cv.width; field.height=cv.height;
+  const f=field.getContext('2d');
+  const n=Math.round((W*H)/4000);
+  for(let i=0;i<n;i++){
+    const x=Math.random()*cv.width,y=Math.random()*cv.height;
+    const r=(Math.random()**3)*1.6*DPR+0.3, a=Math.random()*.5+.08, t=Math.random();
+    f.fillStyle=t<.12?`rgba(180,205,255,${a})`:t<.2?`rgba(255,210,170,${a})`:`rgba(230,230,242,${a})`;
+    f.beginPath();f.arc(x,y,r,0,7);f.fill();
+  }
+}
+function resize(){
+  DPR=Math.min(devicePixelRatio||1,2);
+  W=stage.clientWidth; H=stage.clientHeight;
+  if(!W||!H)return;                      // layout not ready yet — observer will retry
+  cv.width=W*DPR; cv.height=H*DPR;
+  CX=cv.width*.5; CY=cv.height*.40; RU=Math.min(cv.width,cv.height);
+  buildField(); initCloud(); lensPaths=null;
+}
+addEventListener('resize',resize);
+addEventListener('load',resize);
+if('ResizeObserver'in window)new ResizeObserver(resize).observe(stage);
+
+/* pointer (for the cloud nudge) */
+stage.addEventListener('pointermove',e=>{
+  const r=stage.getBoundingClientRect();
+  ST.pointer={x:(e.clientX-r.left)*DPR,y:(e.clientY-r.top)*DPR};
+},{passive:true});
+stage.addEventListener('pointerleave',()=>ST.pointer=null);
+
+/* ============================================================
+   SCENE 1 · CLOUD — gravity particle sim
+   ============================================================ */
+let dust=[];
+function initCloud(){
+  dust=[];
+  for(let i=0;i<300;i++) dust.push({
+    x:Math.random()*cv.width, y:Math.random()*cv.height,
+    vx:(Math.random()-.5)*.18*DPR, vy:(Math.random()-.5)*.18*DPR,
+    s:Math.random()*1.6*DPR+0.6, hue:Math.random()
+  });
+}
+function drawCloudGlow(a,t){
+  const g=cx.createRadialGradient(CX,CY,0,CX,CY,RU*.55);
+  g.addColorStop(0,`rgba(139,123,216,${.14*a})`);
+  g.addColorStop(.55,`rgba(176,107,180,${.07*a})`);
+  g.addColorStop(1,'rgba(0,0,0,0)');
+  cx.fillStyle=g;cx.fillRect(0,0,cv.width,cv.height);
+}
+function sceneCloud(a,q,t,dt){
+  drawCloudGlow(a,t);
+  const pull=(.06+ST.ck*1.6);
+  for(const p of dust){
+    if(!RM){
+      let dx=CX-p.x, dy=CY-p.y, d=Math.hypot(dx,dy)+30;
+      p.vx+=dx/d*pull*.018*dt; p.vy+=dy/d*pull*.018*dt;
+      if(ST.pointer){
+        dx=ST.pointer.x-p.x; dy=ST.pointer.y-p.y; d=Math.hypot(dx,dy);
+        if(d<240*DPR&&d>4){const f=900*DPR/(d*d);p.vx+=dx/d*f*dt*.05;p.vy+=dy/d*f*dt*.05;}
+      }
+      p.vx*=.986;p.vy*=.986;
+      p.x+=p.vx*dt*.06;p.y+=p.vy*dt*.06;
+      if(p.x<0)p.x+=cv.width;if(p.x>cv.width)p.x-=cv.width;
+      if(p.y<0)p.y+=cv.height;if(p.y>cv.height)p.y-=cv.height;
+    }
+    const al=a*(.35+.5*p.hue);
+    cx.fillStyle=p.hue<.25?`rgba(180,160,230,${al})`:`rgba(225,222,240,${al*.8})`;
+    cx.beginPath();cx.arc(p.x,p.y,p.s,0,7);cx.fill();
+  }
+  /* growing clump */
+  if(ST.ck>.12){
+    const r=RU*(.012+ST.ck*.05);
+    const g=cx.createRadialGradient(CX,CY,0,CX,CY,r*3);
+    g.addColorStop(0,`rgba(255,220,190,${.55*a*ST.ck})`);g.addColorStop(1,'rgba(0,0,0,0)');
+    cx.fillStyle=g;cx.beginPath();cx.arc(CX,CY,r*3,0,7);cx.fill();
+  }
+}
+
+/* ============================================================
+   generic glowing star
+   ============================================================ */
+function hexRGB(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]}
+function star(a,rr,c1,c2,halo,t,jit){
+  const fl=RM?0:(Math.sin(t*.004)+Math.sin(t*.0093))*.005*(jit||1);
+  const rad=Math.max((rr+fl)*RU,2);
+  const[r2,g2,b2]=hexRGB(c2);
+  let g=cx.createRadialGradient(CX,CY,0,CX,CY,rad*(1+(halo||.3)*3));
+  g.addColorStop(0,`rgba(${r2},${g2},${b2},${.30*a})`);g.addColorStop(1,'rgba(0,0,0,0)');
+  cx.fillStyle=g;cx.fillRect(0,0,cv.width,cv.height);
+  g=cx.createRadialGradient(CX,CY,0,CX,CY,rad);
+  g.addColorStop(0,c1);g.addColorStop(.55,c2);g.addColorStop(1,`rgba(${r2},${g2},${b2},0)`);
+  cx.globalAlpha=a;cx.fillStyle=g;cx.beginPath();cx.arc(CX,CY,rad,0,7);cx.fill();cx.globalAlpha=1;
+  return rad;
+}
+
+/* ============================================================
+   SCENE 2 · PROTOSTAR — infall + thermometer
+   ============================================================ */
+function sceneProto(a,q,t){
+  const hh=clamp(ST.heat,0,1.05);
+  drawCloudGlow(a*.5*(1-hh*.6),t);
+  star(a,.03+hh*.022,'#fff6e2','#ffb35c',.5+hh,t);
+  cx.save();cx.translate(CX,CY);
+  cx.strokeStyle=`rgba(180,160,230,${.4*a})`;cx.lineWidth=1*DPR;
+  for(let i=0;i<12;i++){
+    const ang=i/12*Math.PI*2+.3, off=RM?i*.08:((t*.00014)+i*.085)%1;
+    const d1=(.36-off*.28)*RU, d2=d1-.04*RU;
+    if(d2>.07*RU){cx.beginPath();cx.moveTo(Math.cos(ang)*d1,Math.sin(ang)*d1);cx.lineTo(Math.cos(ang)*d2,Math.sin(ang)*d2);cx.stroke();}
+  }
+  cx.restore();
+  /* fusion flash once lit */
+  if(ST.heat>.96){const f=clamp((ST.heat-.96)/.06,0,1);
+    const g=cx.createRadialGradient(CX,CY,0,CX,CY,RU*.3);
+    g.addColorStop(0,`rgba(255,245,220,${.5*f*a})`);g.addColorStop(1,'rgba(0,0,0,0)');
+    cx.fillStyle=g;cx.fillRect(0,0,cv.width,cv.height);}
+}
+
+/* ============================================================
+   SCENE 3 · BALANCE — thermostat with arrows
+   ============================================================ */
+function arrow(x1,y1,x2,y2,col,wd){
+  const a=Math.atan2(y2-y1,x2-x1),hl=7*DPR;
+  cx.strokeStyle=col;cx.fillStyle=col;cx.lineWidth=wd;
+  cx.beginPath();cx.moveTo(x1,y1);cx.lineTo(x2,y2);cx.stroke();
+  cx.beginPath();cx.moveTo(x2,y2);
+  cx.lineTo(x2-hl*Math.cos(a-.45),y2-hl*Math.sin(a-.45));
+  cx.lineTo(x2-hl*Math.cos(a+.45),y2-hl*Math.sin(a+.45));
+  cx.closePath();cx.fill();
+}
+function sceneBalance(a,q,t,dt){
+  /* spring integration when not dragging */
+  if(!ST.dragging&&Math.abs(ST.perturb)+Math.abs(ST.perturbV)>1e-4){
+    if(RM){ST.perturb=0;ST.perturbV=0;}
+    else{
+      const k=.000026,c=.0035;
+      ST.perturbV+=(-k*ST.perturb-c*ST.perturbV)*dt;
+      ST.perturb+=ST.perturbV*dt;
+      const el=document.getElementById('perturb');
+      el.value=clamp(500+ST.perturb/0.35*500,0,1000);
+    }
+  }
+  const R=1+ST.perturb;
+  const rad=star(a,.095*R,'#fff3d6','#ffb35c',.3,t);
+  /* arrows: gravity ∝ 1/R², pressure ∝ R^-5 (fusion thermostat) */
+  const Lg=.085*RU/(R*R), Lp=.085*RU*Math.pow(R,-5);
+  for(let i=0;i<8;i++){
+    const ang=i/8*Math.PI*2+Math.PI/8;
+    const c1=Math.cos(ang),s1=Math.sin(ang);
+    const o=rad+ .10*RU;
+    cx.globalAlpha=a;
+    arrow(CX+c1*(o+Lg),CY+s1*(o+Lg),CX+c1*o,CY+s1*o,'rgba(143,194,255,.85)',2*DPR);
+  }
+  for(let i=0;i<8;i++){
+    const ang=i/8*Math.PI*2;
+    const c1=Math.cos(ang),s1=Math.sin(ang);
+    const o=rad*.55;
+    arrow(CX+c1*o,CY+s1*o,CX+c1*(o+Lp),CY+s1*(o+Lp),'rgba(255,179,92,.95)',2*DPR);
+  }
+  cx.globalAlpha=1;
+}
+
+/* ============================================================
+   SCENE 4 · GIANT — swelling + onion shells
+   ============================================================ */
+function sceneGiant(a,q,t,dt,shellsOverride){
+  const grow=smooth(clamp(shellsOverride!=null?1:ST.swell,0,1));
+  const rr=lerp(.10,.27,grow);
+  const rad=star(a,rr,'#ffd2b0','#ff6a52',.45,t);
+  const sf=shellsOverride!=null?shellsOverride:clamp(ST.shellF,0,5);
+  const cols=['rgba(255,179,92,.5)','rgba(255,210,122,.5)','rgba(188,216,251,.45)','rgba(143,194,255,.5)','rgba(185,167,255,.55)','rgba(234,232,242,.9)'];
+  for(let i=0;i<5;i++){
+    const sa=clamp(sf-i,0,1);
+    if(sa<=0)break;
+    cx.globalAlpha=a*sa;
+    cx.strokeStyle=cols[i];cx.lineWidth=1.2*DPR;
+    cx.beginPath();cx.arc(CX,CY,rad*(.78-(i*.13)),0,7);cx.stroke();
+  }
+  if(sf>=4.6){cx.globalAlpha=a*clamp((sf-4.6)/.4,0,1);cx.fillStyle=cols[5];cx.beginPath();cx.arc(CX,CY,rad*.10,0,7);cx.fill();}
+  cx.globalAlpha=1;
+  return rad;
+}
+
+/* ============================================================
+   SCENE 5 · IRON — giant + curve dot + meter (DOM driven)
+   ============================================================ */
+let bindPath=null,bindLen=0,bindFeFrac=.78;
+function ironDOM(){
+  const q=clamp(ST.dotF,0,1);
+  if(!bindPath){
+    bindPath=document.querySelector('#bindsvg path');
+    bindLen=bindPath.getTotalLength();
+    for(let f=0;f<=1;f+=.01){if(bindPath.getPointAtLength(f*bindLen).x>=380){bindFeFrac=f;break;}}
+  }
+  const pt=bindPath.getPointAtLength(clamp(q,0,1)*bindFeFrac*bindLen);
+  const dot=document.getElementById('bindDot'),lab=document.getElementById('bindLab');
+  dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);
+  lab.setAttribute('x',pt.x+10);lab.setAttribute('y',pt.y-8);
+  lab.textContent=pt.x<60?'H':pt.x<150?'He':pt.x<240?'C':pt.x<310?'O':pt.x<368?'Si':'Fe';
+  const m=0.2+1.25*clamp(ST.coreF,0,1);
+  document.getElementById('coreFill').style.width=clamp(m/1.45*100,0,100)+'%';
+  document.getElementById('coreMeter').classList.toggle('crit',m>1.32);
+  document.getElementById('ironStat').innerHTML=
+    m>1.38?'<strong>1.4 M☉ reached — electron degeneracy fails.</strong>'
+          :`Iron core: ${m.toFixed(2)} M☉ · Chandrasekhar limit: 1.4 M☉`;
+}
+function sceneIron(a,q,t){
+  const sh=(ST.coreF>.92&&!RM)?Math.sin(t*.05)*2.4*DPR*(ST.coreF-.92)*12:0;
+  const ox=CX;CX+=sh;
+  sceneGiant(a,1,t,0,5);
+  if(ST.coreGlow>.02)star(a*ST.coreGlow,.030,'#ffffff','#cfe3ff',.8,t);
+  CX=ox;
+  if(a>.5)ironDOM();
+}
+
+/* ============================================================
+   SCENE 6 · SUPERNOVA — collapse, neutrinos, blast
+   ============================================================ */
+function rnd(i){const x=Math.sin(i*127.1)*43758.5453;return x-Math.floor(x)}
+function sceneNova(a,q,t){
+  let p=clamp(ST.novaP,0,1);
+  if(ST.novaT>0){p=clamp((performance.now()-ST.novaT)/3800,0,1);if(p>=1)ST.novaT=-1;}
+  const collapse=clamp(p/.16,0,1);
+  /* fading giant */
+  star(a*(1-collapse*.75),lerp(.27,.20,collapse),'#ffd2b0','#ff6a52',.4,t);
+  /* shrinking core */
+  star(a,lerp(.05,.012,collapse),'#ffffff','#cfe3ff',1.2,t);
+  /* neutrino spray */
+  if(p>.14){
+    const np=clamp((p-.14)/.5,0,1);
+    cx.globalAlpha=a*(1-np*.6);
+    for(let i=0;i<46;i++){
+      const ang=rnd(i)*Math.PI*2, sp=.25+rnd(i+99)*.75;
+      const d=(np*sp)*RU*.85;
+      if(d<RU*.8){cx.fillStyle='rgba(143,230,255,.9)';
+        cx.beginPath();cx.arc(CX+Math.cos(ang)*d,CY+Math.sin(ang)*d,1.4*DPR,0,7);cx.fill();}
+    }
+    cx.globalAlpha=1;
+  }
+  /* flash */
+  const flash=Math.exp(-(((p-.26)/.10)**2));
+  if(flash>.01){
+    const g=cx.createRadialGradient(CX,CY,0,CX,CY,RU*.9);
+    g.addColorStop(0,`rgba(255,250,240,${.95*flash*a})`);g.addColorStop(1,'rgba(0,0,0,0)');
+    cx.fillStyle=g;cx.fillRect(0,0,cv.width,cv.height);
+  }
+  /* expanding shell + ejecta */
+  if(p>.28){
+    const e=clamp((p-.28)/.7,0,1);
+    const rad=(.05+e*.6)*RU;
+    cx.strokeStyle=`rgba(255,190,150,${(1-e)*.85*a})`;cx.lineWidth=(2.5-e*1.5)*DPR;
+    cx.beginPath();cx.arc(CX,CY,rad,0,7);cx.stroke();
+    cx.strokeStyle=`rgba(143,194,255,${(1-e)*.4*a})`;
+    cx.beginPath();cx.arc(CX,CY,rad*1.13,0,7);cx.stroke();
+    cx.globalAlpha=a*(1-e*.7);
+    for(let i=0;i<34;i++){
+      const ang=rnd(i+7)*Math.PI*2,sp=.45+rnd(i+31)*.55;
+      const d=e*sp*rad;
+      cx.fillStyle=i%3?'rgba(255,170,110,.85)':'rgba(255,220,180,.85)';
+      cx.beginPath();cx.arc(CX+Math.cos(ang)*d,CY+Math.sin(ang)*d,(1.6-e)*1.6*DPR,0,7);cx.fill();
+    }
+    cx.globalAlpha=1;
+    /* what remains */
+    star(a*e,.010,'#ffffff','#8fc2ff',1.4,t);
+  }
+}
+
+/* ============================================================
+   SCENE 7 · NEUTRON STAR — pulsar
+   ============================================================ */
+function sceneNS(a,q,t){
+  star(a,.012,'#ffffff','#8fc2ff',1.6,t);
+  const rot=RM?.8:t*.0014;
+  cx.save();cx.translate(CX,CY);cx.rotate(rot);
+  const beam=al=>{
+    const g=cx.createLinearGradient(0,0,0,-RU*.45);
+    g.addColorStop(0,`rgba(143,194,255,${.30*al})`);g.addColorStop(1,'rgba(143,194,255,0)');
+    cx.fillStyle=g;
+    cx.beginPath();cx.moveTo(0,0);cx.lineTo(-RU*.05,-RU*.45);cx.lineTo(RU*.05,-RU*.45);cx.closePath();cx.fill();
+  };
+  beam(a);cx.rotate(Math.PI);beam(a);
+  cx.restore();
+}
+
+/* ============================================================
+   SCENE 7b · REMNANTS — one ending at a time
+   ============================================================ */
+function sceneRemnants(a,q,t){
+  const f=clamp(ST.remF,0,2);
+  const wdA=clamp(1-f,0,1);
+  if(wdA>.01) star(a*wdA,.05,'#ffffff','#bcd0f0',.30,t);   /* white dwarf */
+  const nsA=clamp(1-Math.abs(f-1)*1.6,0,1);
+  if(nsA>.01) sceneNS(a*nsA,q,t);                           /* pulsar */
+  const g2=clamp((f-1)/1,0,1);
+  if(g2>.01){                                               /* the light goes out */
+    star(a*(1-g2),.012*(1-g2*.85),'#ffffff','#8fc2ff',1.4,t);
+    cx.strokeStyle=`rgba(255,200,140,${.4*g2*a})`;cx.lineWidth=1.4*DPR;
+    cx.beginPath();cx.arc(CX,CY,.052*RU*g2,0,7);cx.stroke();
+  }
+}
+
+/* ============================================================
+   photon integrator (Newtonian toy, c = 1)
+   ============================================================ */
+function tracePhoton(x,y,vx,vy,GM,steps,ds,minR,maxR){
+  const pts=[x,y];
+  for(let i=0;i<steps;i++){
+    const r=Math.hypot(x,y);
+    if(r<minR||r>maxR)break;
+    const h=Math.min(ds,r*.22);                      // adaptive step near the hole
+    const acc=GM/(r*r);
+    vx+=-x/r*acc*h; vy+=-y/r*acc*h;
+    const v=Math.hypot(vx,vy); vx/=v; vy/=v;         // photons keep speed c
+    x+=vx*h; y+=vy*h;
+    pts.push(x,y);
+  }
+  return pts;
+}
+function drawPath(pts,col,wd,dotPhase){
+  cx.strokeStyle=col;cx.lineWidth=wd;
+  cx.beginPath();cx.moveTo(CX+pts[0],CY+pts[1]);
+  for(let i=2;i<pts.length;i+=2)cx.lineTo(CX+pts[i],CY+pts[i+1]);
+  cx.stroke();
+  if(dotPhase!=null&&pts.length>4){
+    const n=pts.length/2-1;
+    const k=Math.floor((dotPhase%1)*n)*2;
+    cx.fillStyle='#fff';
+    cx.beginPath();cx.arc(CX+pts[k],CY+pts[k+1],2.2*DPR,0,7);cx.fill();
+  }
+}
+
+/* ============================================================
+   SCENE 8 · HORIZON — squeeze the Sun with light rays
+   ============================================================ */
+function sceneHorizon(a,q,t){
+  const frac=ST.squeezeFrac;                       // v_esc / c
+  const rv=clamp(.30*Math.pow(ST.squeezeR,.30),.045,.30); // visual radius
+  if(frac<1){
+    const heat=clamp((frac-.02)/.98,0,1);
+    star(a,rv,'#fff3d6',heat<.6?'#ffb35c':'#8fc2ff',.3+heat*.4,t);
+    /* exit cone: rays from one lamp point on the limb, tangential → vertical */
+    const GM=3.4*rv*RU*Math.pow(Math.min(frac,1.05),.75);
+    const n=9;
+    for(let i=0;i<n;i++){
+      const spread=lerp(-1.45,1.45,i/(n-1));
+      const va=-Math.PI/2+spread;                  // launch direction from vertical
+      const pts=tracePhoton(0,-rv*RU,Math.cos(va),Math.sin(va),GM,900,RU*.012,rv*RU*.96,RU*.62);
+      drawPath(pts,`rgba(255,236,200,${.5*a})`,1.1*DPR,RM?null:(t*.0004+i*.13));
+    }
+  } else {
+    sceneBH(a,t,.075);
+  }
+}
+
+/* ============================================================
+   black hole renderer (photon ring + lensed disk)
+   ============================================================ */
+function sceneBH(a,t,rscale,hot){
+  const r=(rscale||.075)*RU;
+  cx.save();cx.translate(CX,CY);
+  const disk=al=>{
+    const g=cx.createLinearGradient(-r*3,0,r*3,0);
+    g.addColorStop(0,`rgba(255,140,80,${al*.25})`);
+    g.addColorStop(.5,`rgba(255,220,170,${al})`);
+    g.addColorStop(1,`rgba(255,140,80,${al*.25})`);
+    cx.strokeStyle=g;
+  };
+  cx.lineWidth=r*.16;disk(.55*a);
+  cx.beginPath();cx.ellipse(0,0,r*1.55,r*1.18,0,Math.PI*1.08,Math.PI*1.92);cx.stroke();
+  cx.lineWidth=r*.30;disk(.8*a);
+  cx.beginPath();cx.ellipse(0,0,r*2.9,r*.62,0,Math.PI,Math.PI*2);cx.stroke();
+  cx.fillStyle='#000';cx.beginPath();cx.arc(0,0,r,0,7);cx.fill();
+  cx.lineWidth=Math.max(1.4*DPR,r*.045);
+  cx.strokeStyle=hot?`rgba(190,220,255,${.95*a})`:`rgba(255,236,214,${.95*a})`;
+  cx.shadowColor=hot?'rgba(150,200,255,.9)':'rgba(255,200,140,.9)';cx.shadowBlur=14*DPR;
+  cx.beginPath();cx.arc(0,0,r*1.04,0,7);cx.stroke();cx.shadowBlur=0;
+  cx.lineWidth=r*.34;disk(.95*a);
+  cx.beginPath();cx.ellipse(0,0,r*2.9,r*.62,0,0,Math.PI);cx.stroke();
+  const g=cx.createRadialGradient(0,0,r,0,0,r*5);
+  g.addColorStop(0,`rgba(255,160,100,${.10*a})`);g.addColorStop(1,'rgba(0,0,0,0)');
+  cx.fillStyle=g;cx.fillRect(-r*5,-r*5,r*10,r*10);
+  cx.restore();
+  return r;
+}
+
+/* ============================================================
+   SCENE 9 · STRANGE — four sub-steps
+   ============================================================ */
+let lensPaths=null;
+function sceneLens(a,t){
+  const r=.06*RU;
+  /* shadow + photon sphere only (no disk: keep rays readable) */
+  cx.save();cx.translate(CX,CY);
+  cx.fillStyle='#000';cx.beginPath();cx.arc(0,0,r,0,7);cx.fill();
+  cx.lineWidth=1.6*DPR;cx.strokeStyle='rgba(255,236,214,.95)';
+  cx.shadowColor='rgba(255,200,140,.8)';cx.shadowBlur=10*DPR;
+  cx.beginPath();cx.arc(0,0,r*1.04,0,7);cx.stroke();cx.shadowBlur=0;
+  cx.setLineDash([4*DPR,5*DPR]);cx.strokeStyle='rgba(143,194,255,.55)';cx.lineWidth=1*DPR;
+  cx.beginPath();cx.arc(0,0,r*1.5,0,7);cx.stroke();cx.setLineDash([]);
+  cx.fillStyle='rgba(143,194,255,.8)';cx.font=`${10*DPR}px IBM Plex Mono`;
+  cx.fillText('photon sphere · 1.5 rs',r*1.5+8*DPR,-r*1.5);
+  cx.restore();
+  if(!lensPaths){
+    lensPaths=[];
+    const GM=1.8*r;                                 /* capture b ≲ 2.2 r */
+    const bs=[-5.2,-3.6,-2.6,-1.9,-1.2,1.2,1.9,2.6,3.6,5.2];
+    for(const bb of bs){
+      lensPaths.push(tracePhoton(-cv.width*.52,bb*r,1,0,GM,420,RU*.01,r*1.02,RU*1.3));
+    }
+  }
+  lensPaths.forEach((p,i)=>drawPath(p,`rgba(255,236,200,${.45*a})`,1.1*DPR,RM?null:(t*.00028+i*.1)));
+}
+function sceneClocks(a,t){ sceneBH(a,t,.07); }
+function sceneTides(a,t){
+  const r=sceneBH(a,t,ST.tideBig?.14:.045);
+  /* astronaut approaching from the right */
+  const dmax=RU*.40;
+  const d=lerp(r*1.15,dmax,ST.tideT);
+  const A=ST.tideBig?.0008:.55;                     /* tide ∝ 1/M² at horizon */
+  const du=d/(r*2.2);
+  const stretch=clamp(1+A/(du*du*du),1,7);
+  const sq=1/Math.sqrt(stretch);
+  cx.save();cx.translate(CX+d+18*DPR,CY);cx.scale(stretch,sq);
+  cx.strokeStyle=`rgba(234,232,242,${a})`;cx.lineWidth=2*DPR/Math.sqrt(stretch);
+  cx.lineCap='round';
+  const u=9*DPR;
+  cx.beginPath();cx.arc(u*1.5,0,u*.55,0,7);cx.stroke();        /* head (toward hole = left? no, head away) */
+  cx.beginPath();cx.moveTo(u*.95,0);cx.lineTo(-u*1.1,0);cx.stroke();   /* body */
+  cx.beginPath();cx.moveTo(u*.4,0);cx.lineTo(-u*.1,-u*.8);cx.stroke(); /* arms */
+  cx.beginPath();cx.moveTo(u*.4,0);cx.lineTo(-u*.1, u*.8);cx.stroke();
+  cx.beginPath();cx.moveTo(-u*1.1,0);cx.lineTo(-u*1.9,-u*.5);cx.stroke();/* legs to the hole */
+  cx.beginPath();cx.moveTo(-u*1.1,0);cx.lineTo(-u*1.9, u*.5);cx.stroke();
+  cx.restore();
+  const st=document.getElementById('tideStat');
+  const msg = stretch>5 ? '<strong>Spaghettification.</strong> The feet are pulled far harder than the head — the body becomes the pasta.'
+    : stretch>1.8 ? 'Tides are building — feet noticeably heavier than head.'
+    : ST.tideBig ? 'Near a supermassive hole, tides at this distance are <strong>negligible</strong> — you could cross the horizon intact.'
+    : 'At a safe distance, the pull on head and feet is nearly equal.';
+  if(st.dataset.m!==msg){st.dataset.m=msg;st.innerHTML=msg;}
+}
+function sceneOrbit(a,t,dt){
+  /* center body */
+  if(ST.orbitBH) sceneBH(a,t,.045); else star(a,.075,'#fff3d6','#ffb35c',.3,t);
+  const R=RU*.27;
+  if(!RM)ST.orbitAng+=dt*.0011;
+  const x=CX+Math.cos(ST.orbitAng)*R, y=CY+Math.sin(ST.orbitAng)*R*.6;
+  ST.orbitTrail.push(x,y); if(ST.orbitTrail.length>240)ST.orbitTrail.splice(0,2);
+  cx.strokeStyle=`rgba(143,194,255,${.35*a})`;cx.lineWidth=1*DPR;
+  cx.setLineDash([2*DPR,4*DPR]);
+  cx.beginPath();cx.ellipse(CX,CY,R,R*.6,0,0,7);cx.stroke();cx.setLineDash([]);
+  for(let i=0;i<ST.orbitTrail.length;i+=2){
+    cx.fillStyle=`rgba(143,194,255,${(i/ST.orbitTrail.length)*.6*a})`;
+    cx.beginPath();cx.arc(ST.orbitTrail[i],ST.orbitTrail[i+1],1.2*DPR,0,7);cx.fill();
+  }
+  const g=cx.createRadialGradient(x,y,0,x,y,8*DPR);
+  g.addColorStop(0,'#cfe3ff');g.addColorStop(1,'rgba(140,170,230,0)');
+  cx.fillStyle=g;cx.beginPath();cx.arc(x,y,8*DPR,0,7);cx.fill();
+}
+function sceneStrange(a,q,t,dt){
+  switch(curVS('strange')){
+    case 'clocks': sceneClocks(a,t);break;
+    case 'tides':  sceneTides(a,t);break;
+    case 'orbit':  sceneOrbit(a,t,dt);break;
+    default:       sceneLens(a,t);
+  }
+}
+
+/* ============================================================
+   SCENE 10 · THERMO — Hawking pairs
+   ============================================================ */
+function miniBH(x,y,r,a){
+  cx.fillStyle='#000';cx.beginPath();cx.arc(x,y,r,0,7);cx.fill();
+  cx.lineWidth=Math.max(1.2*DPR,r*.10);cx.strokeStyle=`rgba(255,236,214,${.95*a})`;
+  cx.shadowColor='rgba(255,200,140,.9)';cx.shadowBlur=10*DPR;
+  cx.beginPath();cx.arc(x,y,r*1.06,0,7);cx.stroke();cx.shadowBlur=0;
+}
+function sceneMerge(a,t){
+  const T=5600, mt=RM?.8:(t%T)/T;
+  const r1=.030*RU,r2=.021*RU,rf=Math.sqrt(r1*r1+r2*r2)*1.22;
+  if(mt<.58){
+    const s=smooth(mt/.58), sep=lerp(.17,.015,s)*RU, ang=RM?0:t*.0022;
+    const m1=r1*r1,m2=r2*r2,tot=m1+m2;
+    miniBH(CX+Math.cos(ang)*sep*(m2/tot),CY+Math.sin(ang)*sep*(m2/tot)*.5,r1,a);
+    miniBH(CX-Math.cos(ang)*sep*(m1/tot),CY-Math.sin(ang)*sep*(m1/tot)*.5,r2,a);
+  } else if(mt<.66){
+    miniBH(CX,CY,rf,a);
+    const f=(mt-.58)/.08;
+    cx.strokeStyle=`rgba(190,220,255,${(1-f)*.8*a})`;cx.lineWidth=2*DPR;
+    cx.beginPath();cx.arc(CX,CY,rf*(1+f*4),0,7);cx.stroke();
+  } else miniBH(CX,CY,rf,a);
+  /* area bars */
+  const bx=CX-RU*.16, by=CY+RU*.26, bw=RU*.32;
+  cx.font=`${10*DPR}px IBM Plex Mono`;cx.textAlign='left';
+  cx.fillStyle=`rgba(143,194,255,${.85*a})`;
+  cx.fillRect(bx,by,bw*((r1*r1+r2*r2)/(rf*rf)),4*DPR);
+  cx.fillText('A\u2081 + A\u2082',bx,by-6*DPR);
+  if(mt>=.58){
+    cx.fillStyle=`rgba(255,179,92,${.9*a})`;
+    cx.fillRect(bx,by+20*DPR,bw,4*DPR);
+    cx.fillText('A final \u2014 always larger',bx,by+15*DPR);
+  }
+}
+function sceneEntropy(a,t){
+  const r=sceneBH(a,t,.07);
+  for(let i=0;i<72;i++){
+    const ang=i/72*Math.PI*2;
+    const fl=.18+.62*Math.abs(Math.sin((RM?0:t*.0018)+i*1.93));
+    cx.fillStyle=i%5?`rgba(185,167,255,${fl*a})`:`rgba(255,210,160,${fl*a})`;
+    const d=r*1.22;
+    cx.fillRect(CX+Math.cos(ang)*d-1.4*DPR,CY+Math.sin(ang)*d-1.4*DPR,2.8*DPR,2.8*DPR);
+  }
+}
+let pairs=[],lastSpawn=0;
+function sceneThermo(a,q,t,dt){
+  const v=curVS('thermo');
+  if(v==='t1'){sceneMerge(a,t);return;}
+  if(v==='t2'){sceneEntropy(a,t);return;}
+  const hot=ST.hawkT<.35;
+  const r=sceneBH(a,t,lerp(.035,.13,ST.hawkT),hot);
+  if(!RM){
+    const rate=lerp(90,900,ST.hawkT);               /* hotter = faster spawning */
+    if(t-lastSpawn>rate&&pairs.length<70){
+      lastSpawn=t;
+      const ang=Math.random()*Math.PI*2;
+      pairs.push({ang,d:r*1.08,out:1,life:1},{ang,d:r*1.08,out:-1,life:1});
+    }
+    for(const p of pairs){
+      p.d+=p.out*dt*(p.out>0?lerp(.10,.028,ST.hawkT):.05)*DPR*1.4;
+      p.life-=dt*.0009;
+    }
+    pairs=pairs.filter(p=>p.life>0&&p.d>r*.2&&p.d<RU*.62);
+  }
+  for(const p of pairs){
+    const x=CX+Math.cos(p.ang)*p.d, y=CY+Math.sin(p.ang)*p.d;
+    cx.fillStyle=p.out>0
+      ?(hot?`rgba(180,215,255,${p.life*a})`:`rgba(255,210,160,${p.life*a})`)
+      :`rgba(150,140,200,${p.life*.6*a})`;
+    cx.beginPath();cx.arc(x,y,1.8*DPR,0,7);cx.fill();
+  }
+}
+
+/* ============================================================
+   SCENE 11 · FATE + OUTRO
+   ============================================================ */
+function sceneFate(a,q,t){ /* quiet starfield; the overlay is the show */ }
+function sceneOutro(a,q,t){ sceneBH(a*.35,t,.06); }
+
+/* ============================================================
+   SCROLL DIRECTOR
+   ============================================================ */
+const sections=[...document.querySelectorAll('[data-scene]')];
+const steps=[...document.querySelectorAll('.step')];
+const SCENES={cloud:sceneCloud,proto:sceneProto,star:sceneBalance,giant:sceneGiant,iron:sceneIron,
+  nova:sceneNova,ns:sceneRemnants,bh:sceneHorizon,strange:sceneStrange,thermo:sceneThermo,fate:sceneFate,outro:sceneOutro};
+const VSPREF={cloud:'c',proto:'p',star:'b',giant:'g',iron:'i',nova:'n',ns:'r',bh:'h',thermo:'t'};
+function curVS(scene){
+  if(scene==='strange')return['lens','clocks','tides','orbit'].includes(ST.vs)?ST.vs:'lens';
+  const pre=VSPREF[scene];
+  if(pre&&ST.vs&&ST.vs[0]===pre)return ST.vs;
+  return pre?pre+'1':'';
+}
+/* overlay shown per step (falls back to scene default) */
+const OVDEF={iron:'ov-iron',ns:'ov-remnants',bh:'ov-horizon',fate:'ov-fate'};
+const OVVS={p1:'ov-proto',p2:'ov-proto',p3:'ov-proto',b2:'ov-balance',b3:'ov-balance',
+  g2:'ov-swelling',g3:'ov-swelling',n2:'ov-nova',n3:'ov-nova',
+  clocks:'ov-clocks',tides:'ov-tides',orbit:'ov-orbit',t3:'ov-thermo'};
+/* beat ranges: each step scrubs its value across its OWN scroll span.
+   Values are continuous across step boundaries, so scrolling (up or down)
+   rewinds and replays precisely — no time-triggered racing. */
+const BEATS={
+  c1:{ck:[.05,.22]},            c2:{ck:[.22,.58]},            c3:{ck:[.62,1]},
+  p1:{heat:[.12,.55]},          p2:{heat:[.55,1.0]},          p3:{heat:[1.02,1.05]},
+  g1:{swell:[0,1],shellF:[0,0]},g2:{swell:[1,1],shellF:[0,4]},g3:{swell:[1,1],shellF:[4,5]},
+  i1:{dotF:[0,1],coreGlow:[0,0],coreF:[.3,.45]},
+  i2:{dotF:[1,1],coreGlow:[0,1],coreF:[.45,.6]},
+  i3:{dotF:[1,1],coreGlow:[1,1],coreF:[.6,1]},
+  n1:{novaP:[0,.17]},           n2:{novaP:[.17,1]},           n3:{novaP:[1,1]},
+  r1:{remF:[0,0]},              r2:{remF:[1,1]},              r3:{remF:[2,2]},
+  h1:{sq:[0,.14]},              h2:{sq:[.14,.7]},             h3:{sq:[.7,1]},  h4:{sq:[1,1]}
+};
+const SCRUBRATE={remF:.0035,ck:.006,default:.009};   // light smoothing only
+function applyScrub(scene,dt){
+  const v=curVS(scene), B=BEATS[v];
+  if(!B)return;
+  for(const key in B){
+    const[a,b]=B[key];
+    const tgt=lerp(a,b,ST.sp);
+    const k=RM?1:Math.min(1,(SCRUBRATE[key]??SCRUBRATE.default)*dt);
+    if(key==='sq'){
+      if(!ST.sqTouched){
+        ST.sqAuto+=(tgt-ST.sqAuto)*k;
+        const el=document.getElementById('squeeze');
+        el.value=Math.round(ST.sqAuto*1000);
+        if(ST.updSq)ST.updSq();
+      }
+    } else ST[key]+=(tgt-ST[key])*k;
+  }
+}
+
+function readScroll(){
+  const trig=innerHeight*.55;
+  let cur=0,q=0;
+  for(let i=0;i<sections.length;i++){
+    const r=sections[i].getBoundingClientRect();
+    if(r.top<=trig){cur=i;q=clamp((trig-r.top)/Math.max(r.height,1),0,1);}
+  }
+  ST.scene=sections[cur].dataset.scene;
+  ST.sceneB=sections[Math.min(cur+1,sections.length-1)].dataset.scene;
+  ST.q=q;
+  /* crossfade as the NEXT chapter heading approaches the trigger line */
+  const nIdx=Math.min(cur+1,sections.length-1);
+  if(nIdx!==cur){
+    const nTop=sections[nIdx].getBoundingClientRect().top;
+    ST.blend=smooth(clamp(1-(nTop-trig)/(innerHeight*.42),0,1));
+  } else ST.blend=0;
+  /* active step = the beat you are reading */
+  let vs='',cap=sections[cur].dataset.cap,active=null;
+  for(const s of steps){
+    const r=s.getBoundingClientRect();
+    if(r.top<=trig){vs=s.dataset.vs;active=s;}
+  }
+  ST.vs=vs;
+  const inCur=active&&sections[cur].contains(active);
+  if(inCur&&active.dataset.cap)cap=active.dataset.cap;
+  steps.forEach(s=>s.classList.toggle('on',s===active&&inCur));
+  /* progress through the active step's scroll span (drives the scrub) */
+  let sp=0;
+  if(inCur){
+    const aTop=active.getBoundingClientRect().top;
+    const ai=steps.indexOf(active);
+    let endTop;
+    if(ai+1<steps.length&&sections[cur].contains(steps[ai+1]))
+      endTop=steps[ai+1].getBoundingClientRect().top;
+    else{
+      const nx=sections[cur+1];
+      endTop=nx?nx.getBoundingClientRect().top:aTop+innerHeight;
+    }
+    sp=clamp((trig-aTop)/Math.max(endTop-aTop,1),0,1);
+  }
+  ST.sp=sp;
+  if(ST.scene!=='bh')ST.sqTouched=false;   // narrative regains the slider on re-entry
+  /* caption */
+  const[nn,txt]=(cap||'·|').split('|');
+  document.getElementById('scapStage').textContent=nn;
+  document.getElementById('scapText').textContent=txt;
+  /* overlays follow the step */
+  const v=curVS(ST.scene);
+  const want=OVVS[v]??OVDEF[ST.scene]??null;
+  document.querySelectorAll('.ov').forEach(o=>o.classList.toggle('show',o.id===want));
+  /* progress */
+  document.getElementById('prog').style.width=
+    (scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%';
+}
+addEventListener('scroll',readScroll,{passive:true});
+
+/* ---------- master loop ---------- */
+let lastT=0;
+function loop(t){
+  requestAnimationFrame(loop);           // schedule first: a draw error can never kill the loop
+  const dt=clamp(t-lastT,0,50);lastT=t;
+  if(!cv.width||!cv.height){resize();return;}
+  cx.fillStyle='#05060c';cx.fillRect(0,0,cv.width,cv.height);
+  if(field&&field.width&&field.height){
+    const off=(scrollY*.03*DPR)%cv.height;
+    cx.globalAlpha=.85;cx.drawImage(field,0,-off);cx.drawImage(field,0,cv.height-off);cx.globalAlpha=1;
+  }
+  applyScrub(ST.scene,dt);
+  const A=SCENES[ST.scene],B=SCENES[ST.sceneB];
+  if(A)A(1-ST.blend,ST.q,t,dt);
+  if(ST.blend>0&&ST.sceneB!==ST.scene&&B)B(ST.blend,0,t,dt);
+}
+resize();readScroll();requestAnimationFrame(loop);
+
+/* ============================================================
+   INTERACTIVE WIRING
+   ============================================================ */
+/* balance perturbation */
+(()=>{const el=document.getElementById('perturb'),st=document.getElementById('balStat');
+  el.addEventListener('input',()=>{ST.dragging=true;ST.perturb=(el.value-500)/500*0.35;ST.perturbV=0;
+    st.innerHTML=ST.perturb<-.05?'Compressing… the core heats, fusion <strong>surges</strong> (gold arrows grow). Let go.'
+      :ST.perturb>.05?'Inflating… the core cools, fusion <strong>stalls</strong>, gravity gains. Let go.'
+      :'Drag away from the middle and release.';});
+  const rel=()=>{ST.dragging=false;
+    if(Math.abs(ST.perturb)>.02)st.innerHTML='<strong>Released.</strong> Watch it ring like a struck bell, then settle — the thermostat always wins.';};
+  el.addEventListener('change',rel);el.addEventListener('pointerup',rel);
+})();
+
+/* squeeze the sun */
+(()=>{
+  const G=6.674e-11,MS=1.989e30,C=2.998e8,RSUN=6.96e8,RS=2*G*MS/(C*C);
+  const el=document.getElementById('squeeze');
+  const rO=document.getElementById('rOut'),vO=document.getElementById('vOut'),st=document.getElementById('sqStat');
+  const fmt=n=>n>=1000?Math.round(n).toLocaleString('en-US'):n.toPrecision(3);
+  function upd(){
+    const t=el.value/1000;ST.squeezeT=t;
+    const R=Math.exp(lerp(Math.log(RSUN),Math.log(RS*.95),t));
+    const v=Math.sqrt(2*G*MS/R),frac=v/C;
+    ST.squeezeFrac=frac;ST.squeezeR=R/RSUN;
+    rO.textContent=R/1000>=1?fmt(R/1000)+' km':fmt(R)+' m';
+    vO.innerHTML=frac<1?`${fmt(v/1000)} km/s <small>${(frac*100).toPrecision(2)}% c</small>`:'&gt; speed of light';
+    st.innerHTML=frac>=1?'<strong>An event horizon has formed.</strong> Below ~3 km the rays cannot leave — same Sun, same mass, now a black hole. (Only a collapsing stellar core ever does this to itself.)'
+      :frac>=.5?'Getting relativistic — the ray fan is visibly closing. One more push…'
+      :t>.4?'Past white-dwarf density. The mass hasn\u2019t changed, only the radius — and the rays are starting to curve.'
+      :'Same mass, smaller ball. Watch the light rays as escape velocity climbs.';
+  }
+  el.addEventListener('input',()=>{ST.sqTouched=true;upd();});
+  ST.updSq=upd;upd();
+})();
+
+/* time dilation */
+(()=>{
+  const el=document.getElementById('dil');
+  const nV=document.getElementById('nearV'),fV=document.getElementById('farV'),st=document.getElementById('dilStat');
+  const nH=document.getElementById('nearHand'),fH=document.getElementById('farHand');
+  let factor=1,aN=0,aF=0,last=performance.now();
+  function upd(){
+    const t=el.value/1000;ST.dilT=t;
+    const x=Math.exp(lerp(Math.log(1.0005),Math.log(50),t));
+    factor=Math.sqrt(1-1/x);
+    const ratio=1/factor;
+    nV.textContent=factor>.995?'100% rate':(factor*100).toPrecision(3)+'% rate';
+    fV.textContent='100% rate';
+    st.innerHTML=ratio<1.02?'Far from the hole, the clocks agree. Drag left.'
+      :`At r = ${x.toPrecision(3)} r<sub>s</sub>: <strong>1 hour for you = ${ratio<100?ratio.toPrecision(3):Math.round(ratio).toLocaleString('en-US')} hours out there.</strong>`
+       +(t<.07?' At the horizon, the ratio diverges — to the universe, your clock stops.':'');
+  }
+  function tick(now){
+    const dt=Math.min(now-last,50);last=now;
+    if(!RM){aF=(aF+dt*.2)%360;aN=(aN+dt*.2*factor)%360;
+      fH.style.transform=`translate(-50%,-100%) rotate(${aF}deg)`;
+      nH.style.transform=`translate(-50%,-100%) rotate(${aN}deg)`;}
+    requestAnimationFrame(tick);
+  }
+  el.addEventListener('input',upd);upd();requestAnimationFrame(tick);
+})();
+
+/* tides */
+(()=>{
+  const el=document.getElementById('tide');
+  const bS=document.getElementById('bhSmall'),bB=document.getElementById('bhBig');
+  el.addEventListener('input',()=>ST.tideT=el.value/1000);
+  bS.addEventListener('click',()=>{ST.tideBig=false;bS.classList.add('active');bB.classList.remove('active');});
+  bB.addEventListener('click',()=>{ST.tideBig=true;bB.classList.add('active');bS.classList.remove('active');});
+})();
+
+/* orbit swap */
+(()=>{
+  const b=document.getElementById('swapBtn'),st=document.getElementById('orbStat');
+  b.addEventListener('click',()=>{
+    ST.orbitBH=!ST.orbitBH;
+    b.textContent=ST.orbitBH?'⇄ Put the Sun back':'⇄ Replace the Sun with a black hole';
+    st.innerHTML=ST.orbitBH
+      ?'<strong>Same mass → same gravity → same orbit.</strong> Radius unchanged, year unchanged. (The weather, admittedly, is ruined.)'
+      :'Earth orbits the Sun. Press the button — and watch what changes about the orbit. (Spoiler: nothing.)';
+  });
+})();
+
+/* hawking */
+(()=>{
+  const el=document.getElementById('hawk');
+  const mO=document.getElementById('hMass'),tO=document.getElementById('hTemp'),
+        lO=document.getElementById('hLife'),st=document.getElementById('hStat');
+  const MS=1.989e30,YR=3.156e7,KT=1.227e23,KE=8.41e-17;
+  const sup=s=>String(s).split('').map(d=>d==='-'?'⁻':'⁰¹²³⁴⁵⁶⁷⁸⁹'[+d]).join('');
+  const sci=(v,u)=>{const e=Math.floor(Math.log10(Math.abs(v))),m=v/10**e;
+    return(e>=-2&&e<=3)?(+v.toPrecision(3)).toLocaleString('en-US')+' '+u:m.toPrecision(2)+'×10'+sup(e)+' '+u;};
+  function upd(){
+    const t=el.value/1000;ST.hawkT=t;
+    const M=Math.exp(lerp(Math.log(1e12),Math.log(8e9*MS),t));
+    const T=KT/M,ev=KE*M**3;
+    mO.textContent=M>=.05*MS?(M/MS).toPrecision(3)+' M☉'
+      :M>=3e24?(M/5.97e24).toPrecision(2)+' Earths'
+      :M>=3.7e22?(M/7.35e22).toPrecision(2)+' Moons':sci(M,'kg');
+    tO.textContent=T<1e-3?sci(T*1e9,'nK'):T<1?sci(T*1e3,'mK'):sci(T,'K');
+    lO.textContent=ev<60?sci(ev,'s'):ev<YR?sci(ev/3600,'h'):sci(ev/YR,'yr');
+    st.innerHTML=T>2.7
+      ?'<strong>Hotter than the 2.7 K cosmic background</strong> — it radiates more than it absorbs: shrink, heat, repeat, ending in a flash of gamma rays. (Watch the pairs fly.)'
+      :'Colder than the Big Bang\u2019s afterglow — today it grows on net. Evaporation must wait for a colder, emptier universe; holes like this will be the last things to die.';
+  }
+  el.addEventListener('input',upd);upd();
+})();
+
+/* fate */
+(()=>{
+  const el=document.getElementById('fate');
+  const orb=document.getElementById('fateOrb'),nm=document.getElementById('fateName'),
+        sub=document.getElementById('fateSub'),story=document.getElementById('fateStory');
+  const life=M=>{const L=10*Math.pow(M,-2.5);
+    return L>=1000?(L/1000).toPrecision(2)+' trillion yr':L>=1?L.toPrecision(2)+' billion yr'
+      :L>=.001?Math.round(L*1000)+' million yr':'a few million yr';};
+  function upd(){
+    const t=el.value/1000;ST.fateT=t;
+    const M=Math.exp(lerp(Math.log(.05),Math.log(60),t));
+    let o;
+    if(M<.08)o={n:'A brown dwarf',s:'Never ignites · fades forever',sz:26,
+      g:'radial-gradient(circle at 35% 35%,#7d5a6e,#2c2030)',gl:'0 0 18px rgba(125,90,110,.5)',
+      st:'Below 0.08 M☉ the core never reaches fusion temperature. It glows dimly from the heat of collapse, then cools for eternity — a star that never was.'};
+    else if(M<.5)o={n:'A red dwarf',s:'Lives '+life(M)+' → white dwarf',sz:30,
+      g:'radial-gradient(circle at 35% 35%,#ff9b7a,#b03a2a)',gl:'0 0 26px rgba(255,110,80,.55)',
+      st:'Thrifty and calm — it sips hydrogen for trillions of years, longer than the universe has existed. Not one red dwarf has yet died of old age. No drama; near-immortality.'};
+    else if(M<8)o={n:'A sun-like star',s:'Lives '+life(M)+' → white dwarf',sz:44,
+      g:'radial-gradient(circle at 35% 35%,#fff3d6,#ffb35c 60%,#ff8a4d)',gl:'0 0 36px rgba(255,179,92,.6)',
+      st:'Steady burn, red-giant swell, then a gentle exhale: a glowing planetary nebula around an Earth-sized white dwarf that cools forever. Our Sun\u2019s future, ~5 billion years out.'};
+    else if(M<20)o={n:'A massive star',s:'Lives '+life(M)+' → neutron star',sz:56,
+      g:'radial-gradient(circle at 35% 35%,#eef4ff,#9cc4ff 55%,#5f86d8)',gl:'0 0 44px rgba(143,194,255,.6)',
+      st:'It races through its fuel, builds an iron heart, and goes supernova — but the core stays under ~3 M☉, so neutron degeneracy holds. A city-sized, billion-ton-per-teaspoon remnant, possibly a flashing pulsar.'};
+    else o={n:'A giant — destined for darkness',s:'Lives '+life(M)+' → black hole',sz:62,
+      g:'radial-gradient(circle at 50% 50%,#000 56%,#000 58%,rgba(255,200,140,.9) 60%,rgba(255,140,80,.25) 70%,transparent 75%)',gl:'0 0 50px rgba(255,160,100,.35)',
+      st:'The star you just scrolled through. Fast life, supernova death, and a core too heavy for any force to support. An event horizon forms — ten million years of nuclear defiance ends in a perfect, silent sphere of no return.'};
+    orb.style.width=o.sz+'px';orb.style.height=o.sz+'px';orb.style.background=o.g;orb.style.boxShadow=o.gl;
+    nm.textContent=o.n;sub.textContent=o.s;story.textContent=o.st;
+  }
+  el.addEventListener('input',upd);upd();
+})();
+
+/* proto thermometer driven by scroll */
+(function domTicker(){
+  if(ST.scene==='proto'||ST.sceneB==='proto'){
+    const logT=lerp(4.2,7.05,clamp(ST.heat,0,1));
+    const T=10**logT;
+    const fill=document.getElementById('tfill'),val=document.getElementById('tval'),sub=document.getElementById('tsub');
+    fill.style.height=clamp((logT-4.2)/2.85*100,4,100)+'%';
+    const lit=logT>=7;
+    val.classList.toggle('lit',lit);
+    val.textContent=lit?'FUSION':T>=1e6?(T/1e6).toPrecision(2)+' million K':Math.round(T/1000).toLocaleString('en-US')+',000 K';
+    sub.textContent=lit?'Hydrogen → helium · the star ignites':'Core temperature · rising as the cloud falls';
+  }
+  if(ST.scene==='giant'||ST.scene==='iron'){
+    const idx=ST.scene==='iron'?4:Math.min(4,Math.floor(clamp(ST.shellF,0,4.999)));
+    document.querySelectorAll('#fuels .fuel').forEach((f,i)=>{
+      f.classList.toggle('on',i===idx);f.classList.toggle('done',i<idx);});
+  }
+  if(ST.scene==='ns'){
+    const idx=Math.round(clamp(ST.remF,0,2));
+    document.querySelectorAll('#ov-remnants .rem').forEach((r,i)=>r.classList.toggle('hl',i===idx));
+  }
+  requestAnimationFrame(domTicker);
+})();
+
+/* nova replay */
+document.getElementById('replayNova').addEventListener('click',()=>{ST.novaT=performance.now();});
+</script>
+</body>
+</html>
