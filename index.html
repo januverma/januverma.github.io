@@ -415,7 +415,7 @@
         /* Projects Section */
         .projects {
             background: var(--cream);
-            padding: 10rem 4rem;
+            padding: 10rem 4rem 6rem;
             border-top: 1px solid var(--light-gray);
         }
 
@@ -449,6 +449,36 @@
             font-size: 0.95rem;
             line-height: 1.8;
             color: var(--gray);
+        }
+
+        .projects-intro a {
+            color: var(--orange);
+            white-space: nowrap;
+            transition: opacity 0.3s ease;
+        }
+
+        .projects-intro a:hover {
+            opacity: 0.65;
+        }
+
+        .projects-viewall {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            margin-top: 3.5rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--black);
+            border-bottom: 1px solid var(--black);
+            padding-bottom: 0.4rem;
+            transition: all 0.3s ease;
+        }
+
+        .projects-viewall:hover {
+            color: var(--orange);
+            border-color: var(--orange);
+            gap: 1.1rem;
         }
 
         /* Project grid (generic) */
@@ -587,13 +617,14 @@
 
         /* Story Section */
         .story {
-            padding: 12rem 4rem;
+            padding: 8rem 4rem 12rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8rem;
             align-items: start;
             max-width: 1600px;
             margin: 0 auto;
+            border-top: 1px solid var(--light-gray);
         }
 
         .story-left {
@@ -1304,16 +1335,17 @@
                     Things I'm<br><span class="italic">building</span>
                 </h2>
                 <p class="projects-intro">
-                    Experiments I'm building — each its own thing. Some belong to a larger track of work; open a project to see where it fits.
+                    A few things I'm building — selected work across research, tools, and interactive explainers. <a href="projects.html">See all projects →</a>
                 </p>
             </div>
 
             <!--
-                PROJECT CARD TEMPLATE
+                FEATURED PROJECTS (home shows 3, hand-picked, newest-first).
+                The full catalogue lives in projects.html.
                 Each project = { number, title, tagline, desc, tags[], status, track? }.
                 Card links to its detail page in projects/. The track (if any) is shown
                 on the detail page as a clickable tag — never branded here on the grid.
-                To add a project: copy a card below and create projects/<slug>.html.
+                To feature a different project, swap a card below (and keep projects.html in sync).
             -->
             <div class="projects-grid">
                 <a href="projects/marginalia.html" class="project-card reveal">
@@ -1360,20 +1392,20 @@
                     </span>
                 </a>
 
-                <a href="projects/stellar-evolution.html" class="project-card reveal">
+                <a href="projects/llm-recsys.html" class="project-card reveal">
                     <div class="project-meta">
-                        <span class="project-number">03 / Project</span>
+                        <span class="project-number">04 / Project</span>
                         <span class="project-status">Live</span>
                     </div>
-                    <h3 class="project-title">Stellar Evolution</h3>
-                    <p class="project-tagline">Every black hole begins as a breath of dust.</p>
+                    <h3 class="project-title">LLMs in RecSys</h3>
+                    <p class="project-tagline">Can an LLM read behavior the way a recommender engineer reads a session?</p>
                     <p class="project-desc">
-                        An interactive, scroll-driven story of a star's whole life — gravitational collapse, the ten-million-year fusion truce, an iron core that can't burn, the supernova, and the three endings decided by mass alone.
+                        A six-part research arc on LLMs in recommendation — from prompt-based preference prediction and scaling laws to synthetic reasoning data, GRPO, generative recommenders, and a repo-backed LLM cross-encoder.
                     </p>
                     <div class="project-tags">
-                        <span>Canvas</span>
-                        <span>JavaScript</span>
-                        <span>Interactive</span>
+                        <span>LLMs</span>
+                        <span>MovieLens</span>
+                        <span>Cross-Encoder</span>
                     </div>
                     <span class="project-arrow">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1382,6 +1414,13 @@
                     </span>
                 </a>
             </div>
+
+            <a href="projects.html" class="projects-viewall">
+                View all projects
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
         </div>
     </section>
 

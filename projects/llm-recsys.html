@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLMs in RecSys — Janu Verma</title>
+    <meta name="description" content="A research arc asking whether a language model can read behavior the way a recommender engineer reads a session — from prompt-based preference prediction to an LLM cross-encoder.">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://januverma.com/projects/llm-recsys.html">
+    <meta property="og:title" content="LLMs in RecSys — Janu Verma">
+    <meta property="og:description" content="Can a language model read behavior the way a recommender engineer reads a session? A six-part research arc on LLMs in recommender systems.">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav id="navbar">
+        <a href="../index.html" class="nav-name">Janu Verma</a>
+        <div class="nav-links">
+            <a href="../index.html#story">About</a>
+            <a href="../index.html#ideas">Writing</a>
+            <a href="../projects.html">Projects</a>
+            <a href="../index.html#speaking">Speaking</a>
+            <a href="../index.html#contact">Contact</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <section class="project-hero">
+        <a href="../projects.html" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            All projects
+        </a>
+
+        <div class="project-eyebrow">
+            <span>04 / Project</span>
+            <span class="dot"></span>
+            <span>Live</span>
+            <a href="../recsys.html" class="project-track">RecSys</a>
+        </div>
+
+        <h1 class="project-name">LLMs in <span class="italic">RecSys</span></h1>
+
+        <p class="project-tagline-big">
+            Can a language model read behavior the way a good recommender engineer reads a session — not as anonymous IDs, but as clues about taste, intent, and the next plausible choice? A six-part arc, from prompt-based tests to a repo-backed cross-encoder.
+        </p>
+
+        <div class="project-links">
+            <a href="https://github.com/januverma/llm-cross-encoders-for-recsys" target="_blank" class="project-link primary">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                View on GitHub
+            </a>
+            <a href="https://januverma.substack.com/p/large-language-models-for-recommender" target="_blank" class="project-link">
+                Read the series
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <div class="project-body">
+        <section class="project-section">
+            <span class="section-label">The Question</span>
+            <h2 class="section-headline">An LLM as a <span class="italic">preference model</span>, not an embedding.</h2>
+            <div class="prose">
+                <p>
+                    Traditional recommenders compress users and items into learned vectors and measure distance between them. This project explores a different interface: give a language model a user's recent behavior, the candidate item, and sometimes attributes or reasoning traces — then ask whether it can infer what the user would actually like.
+                </p>
+                <p>
+                    The bet is that <strong>preference prediction can benefit from language-model reasoning</strong>: plot knowledge, genre associations, taste explanations, cold-start behavior, and the ability to read natural-language metadata that an ID-based model never sees. The old RecSys stack — collaborative filtering, matrix factorization, sequential models — is kept as the control group throughout.
+                </p>
+            </div>
+
+            <blockquote class="pullquote">
+                Not anonymous IDs, but clues about taste, intent, genre memory, and the next plausible choice.
+            </blockquote>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">The Setup</span>
+            <h2 class="section-headline">History plus candidate, and a model's <span class="italic">judgment</span>.</h2>
+            <div class="prose">
+                <p>
+                    The basic unit is a user's last ten movies and a single candidate film: does it match the inferred taste profile? Built on <strong>MovieLens 1M</strong> (a million ratings, six thousand users), the task is framed as a binary like/dislike call, with <em>SVD</em> matrix factorization and the sequential transformer <em>SASRec</em> as baselines.
+                </p>
+                <p>
+                    Zero-shot and few-shot prompting struggled with precision; classical baselines had the opposite failure. But a LoRA fine-tune of a small Llama model overtook both — and it got there on roughly <strong>6,400 examples where SASRec needed 900,000</strong>. The pre-trained world knowledge buys an enormous head start in data efficiency.
+                </p>
+            </div>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Scaling</span>
+            <h2 class="section-headline">More parameters help, until they <span class="italic">don't</span>.</h2>
+            <div class="prose">
+                <p>
+                    Sweeping Qwen2.5 from 0.5B to 14B parameters showed real but flattening gains — <strong>diminishing returns past about 7B</strong>, and the 1.5B model sometimes beating larger siblings. Under a short training budget, the bigger models learned the task while the smallest hovered near random.
+                </p>
+                <p>
+                    Adding user attributes — age, gender, occupation — improved results even in <em>cold-start</em> setups where there was no history to read at all. The honest conclusion: fine-tuned LLMs can match or beat specialized recommenders, but the win has to be weighed against compute and inference latency.
+                </p>
+            </div>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Teaching It To Reason</span>
+            <h2 class="section-headline">Synthetic rationales, and a brush with <span class="italic">RL</span>.</h2>
+            <div class="prose">
+                <p>
+                    Next, GPT-4o generated short reasoning traces — under fifty tokens explaining why a user would like or dislike a film from the genre, theme, and style of their history. Training a 1.5B model to emit both an explanation and a verdict matched or edged past the baselines on a tenth of the engagement data, and pointed toward more transparent recommendations.
+                </p>
+                <p>
+                    Then the reinforcement-learning route: <strong>GRPO</strong>, with no synthetic traces, scoring groups of responses relative to their average. The model gradually taught itself the <code>&lt;reasoning&gt;</code> / <code>&lt;answer&gt;</code> format on its own — but the result was the genuine surprise of the series.
+                </p>
+            </div>
+
+            <blockquote class="pullquote">
+                SFT on well-curated reasoning data turned out to be a robust baseline — beating pure RL, despite the theory.
+            </blockquote>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">Generating, Not Retrieving</span>
+            <h2 class="section-headline">Change the target from <span class="italic">rank</span> to <span class="italic">generate</span>.</h2>
+            <div class="prose">
+                <p>
+                    A detour into generative recommendation: instead of retrieving and ranking from a fixed catalog, model the user–item interaction as a sequence and have the model <em>produce</em> the next item directly. A LoRA-tuned Qwen2.5-7B was trained to predict the next movie from the last ten, evaluated top-1 against sampled negatives.
+                </p>
+                <p>
+                    It worked as a proof of concept — clear signs of learning, with the caveats stated plainly: single-epoch training, thin evaluation, no strong baseline yet. The interesting shift is conceptual: recommendation as generation rather than selection.
+                </p>
+            </div>
+        </section>
+
+        <section class="project-section">
+            <span class="section-label">The Cross-Encoder</span>
+            <h2 class="section-headline">Make the <span class="italic">interaction</span> the thing you model.</h2>
+            <div class="prose">
+                <p>
+                    The arc lands on a bridge between worlds. Dual-encoders embed the user and the item separately and compare the two vectors; a <strong>cross-encoder</strong> feeds the user history and candidate through a single model together — joined by a <code>[CAND]</code> token — so the model can inspect their interaction directly rather than after the fact.
+                </p>
+                <p>
+                    Qwen2.5-7B produces the representation, an MLP head scores it as a five-way rating prediction. Title alone was weak; titles plus genre and rating moved the needle sharply, reaching an F1 around <strong>0.75</strong>. It's the natural home for everything the series learned — and it's the one piece with a first-party repo behind it.
+                </p>
+            </div>
+
+            <blockquote class="pullquote">
+                LLMs bring semantic understanding, but recommendation still punishes latency, calibration errors, popularity bias, and weak evaluation. The project lives in that tension — it doesn't pretend language models simply replace ranking systems.
+            </blockquote>
+
+            <div class="stack-grid">
+                <div class="stack-item">
+                    <div class="label">Models</div>
+                    <div class="value">Llama 3.2 · Qwen2.5</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Tuning</div>
+                    <div class="value">LoRA SFT</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">RL</div>
+                    <div class="value">GRPO</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Data</div>
+                    <div class="value">MovieLens 1M</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Baselines</div>
+                    <div class="value">SVD · SASRec</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Synthetic</div>
+                    <div class="value">GPT-4o traces</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Final Model</div>
+                    <div class="value">LLM Cross-Encoder</div>
+                </div>
+                <div class="stack-item">
+                    <div class="label">Code</div>
+                    <div class="value">Open Source</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="next-project">
+        <span class="label">Another Project</span>
+        <h2>A conversational<br><span class="italic">book recommender</span></h2>
+        <a href="marginalia.html" class="arrow-link">
+            See Marginalia
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </section>
+
+    <footer>
+        <span>© 2026 Janu Verma</span>
+        <span>London</span>
+    </footer>
+
+    <script>
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+        revealElements.forEach(el => observer.observe(el));
+
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        }, { passive: true });
+
+        const navToggle = document.getElementById('navToggle');
+        navToggle.addEventListener('click', () => {
+            const open = navbar.classList.toggle('menu-open');
+            navToggle.setAttribute('aria-expanded', open);
+        });
+    </script>
+</body>
+</html>
